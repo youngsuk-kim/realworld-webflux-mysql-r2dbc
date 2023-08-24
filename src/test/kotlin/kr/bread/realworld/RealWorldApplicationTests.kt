@@ -1,10 +1,10 @@
-package kr.bread.r2dbc
+package kr.bread.realworld
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class R2dbcApplicationTests {
+class RealWorldApplicationTests {
 
     @Test
     fun contextLoads() {
