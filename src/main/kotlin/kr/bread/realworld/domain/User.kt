@@ -12,13 +12,32 @@ class User(
 
     @Id
     @Column("ID")
-    val id: Long? = null,
+    var id: Long? = null,
+
+    @Column("USERNAME")
+    var username: String,
+
+    @Column("EMAIL")
+    var email: String,
+
+    @Column("PASSWORD")
+    var password: String,
 
     @CreatedDate
     @Column("CREATED_AT")
-    val createdAt: LocalDateTime? = null,
+    var createdAt: LocalDateTime? = null,
 
     @LastModifiedDate
     @Column("UPDATED_AT")
-    val updatedAt: LocalDateTime? = null,
-)
+    var updatedAt: LocalDateTime? = null,
+) {
+    companion object {
+
+        /**
+         * for register user
+         */
+        fun of(username: String, email: String, password: String): User {
+            return User(username = username, email = email, password = password)
+        }
+    }
+}

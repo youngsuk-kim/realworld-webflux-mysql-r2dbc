@@ -1,4 +1,4 @@
-package kr.bread.realworld.infra.r2dbc
+package kr.bread.realworld.infra
 
 import kr.bread.realworld.domain.User
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
