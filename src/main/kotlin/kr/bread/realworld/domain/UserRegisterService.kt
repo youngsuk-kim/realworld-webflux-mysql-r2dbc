@@ -5,7 +5,7 @@ import kr.bread.realworld.support.utils.BCryptUtils
 import org.springframework.stereotype.Service
 
 @Service
-class RegisterUserService(
+class UserRegisterService(
     private val userRepository: UserRepository,
 ) {
     suspend fun create(username: String, email: String, password: String): UserResult =

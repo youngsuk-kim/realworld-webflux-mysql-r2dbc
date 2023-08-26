@@ -9,7 +9,7 @@ import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer
 import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator
 
 @Configuration
-class DBConfig {
+class DatabaseConfig {
 
     private val log = KotlinLogging.logger {}
 

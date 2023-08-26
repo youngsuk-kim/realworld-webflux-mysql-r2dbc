@@ -1,6 +1,6 @@
 package kr.bread.realworld.controller.request
 
-data class LoginUserHttpRequest(
+data class UserLoginHttpRequest(
     val email: String,
     val password: String
 )

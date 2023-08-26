@@ -8,7 +8,7 @@ import kr.bread.realworld.config.JWTProperties
 
 object JWTUtils {
 
-    fun createToken(claim: JWTClaim, properties: JWTProperties) =
+    fun createToken(claim: JWTClaim, properties: JWTProperties): String =
         JWT.create()
             .withIssuer(properties.issuer)
             .withSubject(properties.subject)

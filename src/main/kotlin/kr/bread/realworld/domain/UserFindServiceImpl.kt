@@ -5,9 +5,9 @@ import kr.bread.realworld.support.exception.UserNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class FindUserServiceImpl(
+class UserFindServiceImpl(
     private val userRepository: UserRepository
-): FindUserService {
+): UserFindService {
     override suspend fun findById(userId: Long): UserResult {
         val user = userRepository.findById(userId)
             ?: throw UserNotFoundException()

@@ -11,7 +11,7 @@ import kr.bread.realworld.support.utils.JWTUtils
 import org.springframework.stereotype.Service
 
 @Service
-class LoginUserService(
+class UserLoginService(
     private val userRepository: UserRepository,
     private val jwtProperties: JWTProperties,
 ) {

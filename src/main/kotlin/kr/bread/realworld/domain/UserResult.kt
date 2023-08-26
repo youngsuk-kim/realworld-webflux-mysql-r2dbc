@@ -1,7 +1,7 @@
 package kr.bread.realworld.domain
 
-import kr.bread.realworld.controller.response.LoginUserHttpResponse
-import kr.bread.realworld.controller.response.RegisterUserHttpResponse
+import kr.bread.realworld.controller.response.UserLoginHttpResponse
+import kr.bread.realworld.controller.response.UserRegisterHttpResponse
 
 data class UserResult(
     val email: String,
@@ -11,7 +11,7 @@ data class UserResult(
     val image: String? = null,
 ) {
     fun toRegisterResponse() =
-        RegisterUserHttpResponse(
+        UserRegisterHttpResponse(
             email = this.email,
             token = this.token,
             username = this.username,
@@ -20,7 +20,7 @@ data class UserResult(
         )
 
     fun toLoginUserResponse() =
-        LoginUserHttpResponse(
+        UserLoginHttpResponse(
             email = this.email,
             token = this.token!!,
             username = this.username,

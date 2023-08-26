@@ -1,5 +1,5 @@
 package kr.bread.realworld.controller
 
-data class NestedUserHttpData<T>(
+data class UserNestedHttpWrapper<T>(
     val user: T
 )

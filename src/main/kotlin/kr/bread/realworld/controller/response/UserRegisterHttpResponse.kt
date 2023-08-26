@@ -1,6 +1,6 @@
 package kr.bread.realworld.controller.response
 
-data class RegisterUserHttpResponse(
+data class UserRegisterHttpResponse(
     val email: String,
     val token: String? = null,
     val username: String,
