@@ -29,3 +29,7 @@ data class UserNotFoundException(
     override val message: String = "user not found.",
 ) : ServerException(404, message)
 
+data class EmailAlreadyRegisterException(
+    override val message: String = "email is already register.",
+) : ServerException(400, message)
+

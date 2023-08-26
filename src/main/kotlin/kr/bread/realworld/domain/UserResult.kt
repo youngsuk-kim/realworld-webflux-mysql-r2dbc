@@ -37,4 +37,13 @@ data class UserResult(
             bio = this.bio,
             image = this.image
         )
+
+    fun toUpdateUserResponse() =
+        UserCurrentHttpResponse(
+            email = this.email,
+            token = this.token,
+            username = this.username,
+            bio = this.bio,
+            image = this.image
+        )
 }

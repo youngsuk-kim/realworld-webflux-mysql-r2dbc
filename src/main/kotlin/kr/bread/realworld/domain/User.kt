@@ -47,8 +47,18 @@ class User(
 
     }
 
-    fun encryptPassword(encodedPassword: String) {
-        this.password = encodedPassword
+    fun update(email: String?, bio: String?, image: String?) {
+        if (!email.isNullOrBlank()) {
+            this.email = email
+        }
+
+        if (!bio.isNullOrBlank()) {
+            this.bio = bio
+        }
+
+        if (!image.isNullOrBlank()) {
+            this.image = image
+        }
     }
 
 }
