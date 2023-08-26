@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class UserRegisterService(
     private val userRepository: UserRepository,
 ) {
-    suspend fun create(username: String, email: String, password: String): UserResult =
+    suspend fun create(username: String, email: String, password: String) =
         User.of(username, email, BCryptUtils.hash(password))
             .run {
                 with(userRepository.save(this)) {

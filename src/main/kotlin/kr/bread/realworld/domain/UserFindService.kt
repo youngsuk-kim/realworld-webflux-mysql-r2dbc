@@ -1,5 +1,6 @@
 package kr.bread.realworld.domain
 
-fun interface UserFindService {
+interface UserFindService {
     suspend fun findById(userId: Long): UserResult
+    suspend fun findByToken(token: String): UserResult
 }

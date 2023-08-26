@@ -25,3 +25,11 @@ Content-Type: application/json
   }
 }
 
+####
+
+# Get current login user API
+
+GET http://localhost:8080/api/user
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJqYXJhIiwic3ViIjoiYXV0aCIsImlhdCI6MTY5MzAxMzU4NCwiZXhwIjoxNjkzMDE3MTg0LCJlbWFpbCI6Impha2VAamFrZS5qYWtlIiwidXNlcm5hbWUiOiJKYWNvYiIsImJpbyI6IiIsImltYWdlIjoiIn0.BdwQaBh607kCWlyuok6uJXNVaiMoGeZGkJqMMH_LSGg
+
+
