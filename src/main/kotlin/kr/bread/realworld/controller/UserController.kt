@@ -1,5 +1,7 @@
 package kr.bread.realworld.controller
 
+import kr.bread.realworld.controller.EndpointConstants.LOGIN_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.REGISTER_ENDPOINT
 import kr.bread.realworld.controller.request.UserLoginHttpRequest
 import kr.bread.realworld.controller.request.UserRegisterHttpRequest
 import kr.bread.realworld.controller.response.UserLoginHttpResponse
@@ -16,7 +18,7 @@ class UserController(
     private val userLoginService: UserLoginService,
 ) {
 
-    @PostMapping("/api/users")
+    @PostMapping(REGISTER_ENDPOINT)
     suspend fun register(
         @RequestBody request: UserNestedHttpWrapper<UserRegisterHttpRequest>,
     ): UserNestedHttpWrapper<UserRegisterHttpResponse> {
@@ -32,7 +34,7 @@ class UserController(
         )
     }
 
-    @PostMapping("/api/users/login")
+    @PostMapping(LOGIN_ENDPOINT)
     suspend fun login(
         @RequestBody request: UserNestedHttpWrapper<UserLoginHttpRequest>,
     ): UserNestedHttpWrapper<UserLoginHttpResponse> {
