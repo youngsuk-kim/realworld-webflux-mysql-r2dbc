@@ -20,6 +20,12 @@ class User(
     @Column("EMAIL")
     var email: String,
 
+    @Column("BIO")
+    var bio: String? = null,
+
+    @Column("image")
+    var image: String? = null,
+
     @Column("PASSWORD")
     var password: String,
 
@@ -36,8 +42,13 @@ class User(
         /**
          * for register user
          */
-        fun of(username: String, email: String, password: String): User {
-            return User(username = username, email = email, password = password)
-        }
+        fun of(username: String, email: String, password: String) =
+            User(username = username, email = email, password = password)
+
     }
+
+    fun encryptPassword(encodedPassword: String) {
+        this.password = encodedPassword
+    }
+
 }
