@@ -6,4 +6,5 @@ import reactor.core.publisher.Mono
 
 interface UserRepository: CoroutineCrudRepository<User, Long> {
     fun findByEmail(email: String): Mono<User>
+    fun findByUsername(username: String): Mono<User>
 }

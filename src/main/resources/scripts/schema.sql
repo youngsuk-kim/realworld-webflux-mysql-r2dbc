@@ -11,3 +11,14 @@ CREATE TABLE USERS
     updated_at timestamp default NOW(),
     primary key (id)
 );
+
+DROP TABLE IF EXISTS FOLLOW;
+CREATE TABLE FOLLOW
+(
+    id         bigint NOT NULL AUTO_INCREMENT,
+    follower_Id bigint,
+    followee_Id bigint,
+    unfollow   boolean,
+    created_at timestamp default NOW(),
+    primary key (id)
+);

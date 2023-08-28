@@ -33,3 +33,6 @@ data class EmailAlreadyRegisterException(
     override val message: String = "email is already register.",
 ) : ServerException(400, message)
 
+data class NoFollowExistException(
+    override val message: String = "no follow exists.",
+) : ServerException(404, message)

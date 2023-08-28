@@ -1,6 +1,7 @@
 package kr.bread.realworld.domain
 
 import kr.bread.realworld.controller.response.UserFollowHttpResponse
+import kr.bread.realworld.controller.response.UserUnfollowHttpResponse
 
 data class ProfileResult(
     val username: String,
@@ -10,6 +11,15 @@ data class ProfileResult(
 ) {
     fun toFollowResponse(): UserFollowHttpResponse {
         return UserFollowHttpResponse(
+            username = username,
+            bio = bio,
+            image = image,
+            following = following
+        )
+    }
+
+    fun toUnFollowResponse(): UserUnfollowHttpResponse {
+        return UserUnfollowHttpResponse(
             username = username,
             bio = bio,
             image = image,

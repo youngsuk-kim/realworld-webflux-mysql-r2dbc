@@ -51,4 +51,16 @@ class UserFindServiceImpl(
             )
         }
     }
+
+    override suspend fun findByUsername(username: String): UserResult {
+        val user = userRepository.findByUsername(username).awaitSingleOrNull()
+
+        return UserResult(
+            id = user?.id!!,
+            email = user.email,
+            username = user.username,
+            bio = user.bio,
+            image = user.image
+        )
+    }
 }

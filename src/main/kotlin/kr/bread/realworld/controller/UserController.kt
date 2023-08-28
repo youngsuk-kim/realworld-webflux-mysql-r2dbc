@@ -1,18 +1,22 @@
 package kr.bread.realworld.controller
 
 import kr.bread.realworld.controller.EndpointConstants.CURRENT_USER_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.FOLLOW_USER_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.LOGIN_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.REGISTER_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.UNFOLLOW_USER_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.UPDATE_USER_ENDPOINT
 import kr.bread.realworld.controller.request.UserLoginHttpRequest
 import kr.bread.realworld.controller.request.UserRegisterHttpRequest
 import kr.bread.realworld.controller.request.UserUpdateHttpRequest
 import kr.bread.realworld.domain.UserFindService
+import kr.bread.realworld.domain.UserFollowService
 import kr.bread.realworld.domain.UserLoginService
 import kr.bread.realworld.domain.UserRegisterService
 import kr.bread.realworld.domain.UserUpdateService
 import kr.bread.realworld.support.annotation.AuthToken
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -24,6 +28,7 @@ class UserController(
     private val userLoginService: UserLoginService,
     private val userFindService: UserFindService,
     private val userUpdateService: UserUpdateService,
+    private val userFollowService: UserFollowService,
 ) {
 
     @PostMapping(REGISTER_ENDPOINT)
@@ -64,12 +69,20 @@ class UserController(
         @AuthToken token: String,
         @RequestBody request: UserNestedHttpWrapper<UserUpdateHttpRequest>,
     ) = UserNestedHttpWrapper(
-            userUpdateService.update(
-                token = token,
-                email = request.user.email,
-                bio = request.user.bio,
-                image = request.user.image
-            ).toUpdateUserResponse()
+        userUpdateService.update(
+            token = token,
+            email = request.user.email,
+            bio = request.user.bio,
+            image = request.user.image
+        ).toUpdateUserResponse()
+    )
+
+    @PostMapping(UNFOLLOW_USER_ENDPOINT)
+    suspend fun unfollowUser(
+        @AuthToken token: String,
+        @PathVariable username: String,
+    ) = ProfileNestedHttpWrapper(
+        userFollowService.follow(token, username).toUnFollowResponse()
     )
 
 }
