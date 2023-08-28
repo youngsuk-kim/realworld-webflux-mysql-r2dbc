@@ -3,6 +3,7 @@ package kr.bread.realworld.config
 import kr.bread.realworld.support.annotation.AuthToken
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.MethodParameter
+import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.BindingContext
 import org.springframework.web.reactive.config.CorsRegistry
@@ -40,7 +41,7 @@ class AuthTokenResolver : HandlerMethodArgumentResolver {
         exchange: ServerWebExchange,
     ): Mono<Any> {
 
-        val authHeader = exchange.request.headers["Authorization"]?.first()
+        val authHeader = exchange.request.headers[HttpHeaders.AUTHORIZATION]?.first()
         checkNotNull(authHeader)
 
         val token = authHeader.split(" ")[1]

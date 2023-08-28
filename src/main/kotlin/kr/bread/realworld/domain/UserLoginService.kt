@@ -31,6 +31,7 @@ class UserLoginService(
             val token = JWTUtils.createToken(jwtClaim, jwtProperties)
 
             return UserResult(
+                id = this.id!!,
                 email = this.email,
                 username = this.username,
                 bio = this.bio,

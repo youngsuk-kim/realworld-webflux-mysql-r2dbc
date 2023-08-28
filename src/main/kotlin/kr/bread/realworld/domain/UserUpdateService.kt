@@ -24,8 +24,8 @@ class UserUpdateService(
 
         val saveUser = userRepository.save(user)
 
-
         return UserResult(
+            id = saveUser.id!!,
             email = saveUser.email,
             username = saveUser.username,
             bio = saveUser.bio,

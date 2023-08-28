@@ -23,6 +23,7 @@ class UserFindServiceImpl(
             .findById(userId) ?: throw UserNotFoundException()
 
         return UserResult(
+            id = user.id!!,
             email = user.email,
             username = user.username,
             bio = user.bio,
@@ -31,6 +32,7 @@ class UserFindServiceImpl(
     }
 
     override suspend fun findByToken(token: String): UserResult {
+
         val email = JWTUtils
             .decode(token, jwtProperties.secret, jwtProperties.issuer)
             .claims["email"]?.asString()
@@ -41,6 +43,7 @@ class UserFindServiceImpl(
         return with(userRepository.findByEmail(email).awaitSingleOrNull()
             ?: throw UserNotFoundException()) {
             UserResult(
+                id = this.id!!,
                 email = this.email,
                 username = this.username,
                 bio = this.bio,

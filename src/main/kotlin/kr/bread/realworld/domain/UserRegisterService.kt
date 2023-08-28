@@ -13,6 +13,7 @@ class UserRegisterService(
             .run {
                 with(userRepository.save(this)) {
                     UserResult(
+                        id = this.id!!,
                         email = this.email,
                         username = this.username,
                         bio = this.bio,
