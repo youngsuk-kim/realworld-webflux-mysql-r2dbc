@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("TAG")
-class Tag (
+class Tag(
 
     @Id
     @Column("ID")
@@ -21,5 +21,8 @@ class Tag (
 
     @CreatedDate
     @Column("CREATED_AT")
-    var createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column("IS_DELETED")
+    var isDeleted: Boolean = false,
 )
