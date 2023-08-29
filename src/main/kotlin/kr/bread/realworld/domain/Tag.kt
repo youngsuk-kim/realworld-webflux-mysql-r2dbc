@@ -6,27 +6,20 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
-@Table(name = "FOLLOW")
-class Follow(
+@Table("TAG")
+class Tag (
 
     @Id
     @Column("ID")
     var id: Long? = null,
 
-    @Column("FOLLOWER_ID")
-    var followerId: Long,
+    @Column("NAME")
+    var name: String,
 
-    @Column("FOLLOWEE_ID")
-    var followeeId: Long,
-
-    @Column("UNFOLLOW")
-    var unfollow: Boolean = false,
+    @Column("ARTICLE_ID")
+    var articleId: Long,
 
     @CreatedDate
     @Column("CREATED_AT")
-    var createdAt: LocalDateTime? = LocalDateTime.now(),
-) {
-    fun unfollow() {
-        this.unfollow = true
-    }
-}
+    var createdAt: LocalDateTime = LocalDateTime.now()
+)

@@ -54,6 +54,32 @@ class UserFollowService(
             followRepository.findByFollowerIdAndFolloweeId(
                 deferredFollower.await().id,
                 deferredFollowee.await().id
+            ).awaitSingleOrNull()?.unfollow() ?: throw NoFollowExistException()
+
+            deferredFollower
+        }.await()
+
+        return ProfileResult(
+            username = user.username,
+            bio = user.bio,
+            image = user.image,
+            following = false
+        )
+    }
+
+    suspend fun findFollow(token: String, followeeUsername: String): ProfileResult {
+        val user = coroutineScope {
+            val deferredFollower = async {
+                userFindService.findByToken(token)
+            }
+
+            val deferredFollowee = async {
+                userFindService.findByUsername(followeeUsername)
+            }
+
+            followRepository.findByFollowerIdAndFolloweeId(
+                deferredFollower.await().id,
+                deferredFollowee.await().id
             ).awaitSingleOrNull() ?: throw NoFollowExistException()
 
             deferredFollower

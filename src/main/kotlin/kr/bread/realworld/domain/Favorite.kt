@@ -3,30 +3,28 @@ package kr.bread.realworld.domain
 import java.time.LocalDateTime
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
-@Table(name = "FOLLOW")
-class Follow(
+@Table(name = "FAVORITE")
+class Favorite (
 
     @Id
     @Column("ID")
     var id: Long? = null,
 
-    @Column("FOLLOWER_ID")
-    var followerId: Long,
+    @Column("USER_ID")
+    var userId: Long,
 
-    @Column("FOLLOWEE_ID")
-    var followeeId: Long,
-
-    @Column("UNFOLLOW")
-    var unfollow: Boolean = false,
+    @Column("IS_DELETED")
+    var isDeleted: Boolean = false,
 
     @CreatedDate
     @Column("CREATED_AT")
-    var createdAt: LocalDateTime? = LocalDateTime.now(),
-) {
-    fun unfollow() {
-        this.unfollow = true
-    }
-}
+    var createdAt: LocalDateTime? = null,
+
+    @LastModifiedDate
+    @Column("UPDATED_AT")
+    var updatedAt: LocalDateTime? = null
+)
