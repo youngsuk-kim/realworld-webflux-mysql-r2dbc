@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS ARTICLE;
 CREATE TABLE ARTICLE
 (
     id          bigint NOT NULL AUTO_INCREMENT,
+    slug       varchar(255),
     title       varchar(255),
     description varchar(500),
     body        mediumtext,

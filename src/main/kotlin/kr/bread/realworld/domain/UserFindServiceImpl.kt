@@ -1,7 +1,6 @@
 package kr.bread.realworld.domain
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kr.bread.realworld.config.JWTProperties
 import kr.bread.realworld.infra.UserRepository
@@ -18,7 +17,7 @@ class UserFindServiceImpl(
 
     private val log = KotlinLogging.logger {}
 
-    override suspend fun findById(userId: Long): UserResult {
+    override suspend fun findById(userId: Long?): UserResult {
         val user = userRepository
             .findById(userId) ?: throw UserNotFoundException()
 
