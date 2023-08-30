@@ -19,7 +19,7 @@ class UserFindServiceImpl(
 
     override suspend fun findById(userId: Long?): UserResult {
         val user = userRepository
-            .findById(userId) ?: throw UserNotFoundException()
+            .findById(userId!!) ?: throw UserNotFoundException()
 
         return UserResult(
             id = user.id!!,
