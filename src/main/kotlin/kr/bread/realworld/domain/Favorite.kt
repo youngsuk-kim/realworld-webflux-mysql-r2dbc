@@ -10,19 +10,19 @@ import org.springframework.data.relational.core.mapping.Table
 class Favorite (
 
     @Id
-    @Column("ID")
+    @Column("id")
     var id: Long? = null,
 
-    @Column("USER_ID")
+    @Column("user_id")
     var userId: Long,
 
-    @Column("ARTICLE_ID")
+    @Column("article_id")
     var articleId: Long,
 
-    @Column("IS_DELETED")
+    @Column("is_deleted")
     var isDeleted: Boolean = false,
 
     @CreatedDate
-    @Column("CREATED_AT")
+    @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
 )

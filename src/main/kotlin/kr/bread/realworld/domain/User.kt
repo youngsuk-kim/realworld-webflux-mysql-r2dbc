@@ -1,9 +1,11 @@
 package kr.bread.realworld.domain
 
 import java.time.LocalDateTime
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
@@ -11,31 +13,35 @@ import org.springframework.data.relational.core.mapping.Table
 class User(
 
     @Id
-    @Column("ID")
+    @Column("id")
     var id: Long? = null,
 
-    @Column("USERNAME")
+    @Column("username")
     var username: String,
 
-    @Column("EMAIL")
+    @Column("email")
     var email: String,
 
-    @Column("BIO")
+    @Column("bio")
     var bio: String? = null,
 
     @Column("image")
     var image: String? = null,
 
-    @Column("PASSWORD")
+    @Column("password")
     var password: String,
 
     @CreatedDate
-    @Column("CREATED_AT")
+    @Column("created_at")
     var createdAt: LocalDateTime? = null,
 
     @LastModifiedDate
-    @Column("UPDATED_AT")
+    @Column("updated_at")
     var updatedAt: LocalDateTime? = null,
+
+    @Transient
+    @Value("null")
+    var article: Set<Article>? = null
 ) {
     companion object {
 

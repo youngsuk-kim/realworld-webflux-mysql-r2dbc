@@ -10,12 +10,12 @@ data class SingleArticle (
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?,
     val favorited: Boolean,
-    val favoritesCount: Int,
-    val tagList: List<String>?,
+    val favoritesCount: Int?,
+    val tagList: Set<String>?,
     val author: ProfileResult
 ) {
     companion object {
-        fun create(article: Article, favoritesCount: Int, user: UserResult, tags: List<String>): SingleArticle {
+        fun create(article: Article, favoritesCount: Int?, user: UserResult, tags: Set<String>?): SingleArticle {
             return SingleArticle(
                 slug = article.slug,
                 title = article.title,

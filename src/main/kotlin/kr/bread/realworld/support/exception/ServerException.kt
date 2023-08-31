@@ -36,3 +36,11 @@ data class EmailAlreadyRegisterException(
 data class NoFollowExistException(
     override val message: String = "no follow exists.",
 ) : ServerException(404, message)
+
+data class ArticleNotFoundException(
+    override val message: String = "no article exists.",
+) : ServerException(404, message)
+
+data class TagNotFoundException(
+    override val message: String = "no tag exists.",
+) : ServerException(404, message)

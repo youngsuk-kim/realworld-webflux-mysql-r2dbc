@@ -5,8 +5,8 @@ Content-Type: application/json
 
 {
   "user":{
-    "username": "Jacob2",
-    "email": "jake2@jake.jake",
+    "username": "Jacob",
+    "email": "jake@jake.jake",
     "password": "jakejake"
   }
 }
@@ -55,4 +55,5 @@ Content-Type: application/json
 POST http://localhost:8080/api/profiles/Jacob2/follow
 Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJqYXJhIiwic3ViIjoiYXV0aCIsImlhdCI6MTY5MzIzNDc0NSwiZXhwIjoxNjkzMjM4MzQ1LCJlbWFpbCI6Impha2VAamFrZS5qYWtlIiwidXNlcm5hbWUiOiJKYWNvYiIsImJpbyI6IiIsImltYWdlIjoiIn0.8R9MIDmmO7RlzALspTMW-4XIn_AW_SA4LbD1QvteYuM
 Content-Type: application/json
+
 

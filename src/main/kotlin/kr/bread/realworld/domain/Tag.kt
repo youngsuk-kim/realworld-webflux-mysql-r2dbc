@@ -10,19 +10,19 @@ import org.springframework.data.relational.core.mapping.Table
 class Tag(
 
     @Id
-    @Column("ID")
+    @Column("id")
     var id: Long? = null,
 
-    @Column("NAME")
+    @Column("name")
     var name: String,
 
-    @Column("ARTICLE_ID")
+    @Column("article_id")
     var articleId: Long,
 
     @CreatedDate
-    @Column("CREATED_AT")
+    @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
-    @Column("IS_DELETED")
+    @Column("is_deleted")
     var isDeleted: Boolean = false,
 )

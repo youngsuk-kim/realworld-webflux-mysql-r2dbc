@@ -13,6 +13,19 @@ data class UserResult(
     val bio: String?,
     val image: String? = null,
 ) {
+
+    companion object {
+        fun of(user: User?, token: String?): UserResult {
+            return UserResult(
+                id = user?.id!!,
+                email = user.email,
+                token = token,
+                username = user.username,
+                bio = user.bio
+            )
+        }
+    }
+
     fun toRegisterResponse() =
         UserRegisterHttpResponse(
             email = this.email,

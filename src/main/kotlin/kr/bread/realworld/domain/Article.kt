@@ -1,9 +1,11 @@
 package kr.bread.realworld.domain
 
 import java.time.LocalDateTime
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
@@ -11,38 +13,51 @@ import org.springframework.data.relational.core.mapping.Table
 class Article(
 
     @Id
-    @Column("ID")
+    @Column("id")
     var id: Long? = null,
 
-    @Column("SLUG")
+    @Column("slug")
     var slug: String,
 
-    @Column("TITLE")
+    @Column("title")
     var title: String,
 
-    @Column("DESCRIPTION")
+    @Column("description")
     var description: String,
 
-    @Column("USER_ID")
+    @Column("user_id")
     var userId: Long,
 
-    @Column("BODY")
+    @Column("body")
     var body: String,
 
-    @Column("IS_DELETED")
+    @Column("is_deleted")
     var isDeleted: Boolean = false,
 
     @CreatedDate
-    @Column("CREATED_AT")
+    @Column("created_at")
     var createdAt: LocalDateTime? = null,
 
     @LastModifiedDate
-    @Column("UPDATED_AT")
+    @Column("updated_at")
     var updatedAt: LocalDateTime? = null,
+
+    @Transient
+    @Value("null")
+    var user: User? = null,
+
+    @Transient
+    @Value("null")
+    var favorites: Set<Favorite>? = null,
+
+    @Transient
+    @Value("null")
+    var tags: Set<Tag>? = null
 ) {
 
     companion object {
-        fun of(title: String, description: String, body: String, userId: Long): Article {
+        fun of(articleContent: ArticleContent, userId: Long): Article {
+            val (title, description, body, _) = articleContent
             return Article(title = title, description = description, body = body, slug = makeSlug(title), userId = userId)
         }
 
@@ -55,5 +70,18 @@ class Article(
 
             return lowercase
         }
+    }
+
+    fun makeRelation(favorites: Set<Favorite>?, tags: Set<Tag>?): Article {
+        this.favorites = favorites
+        this.tags = tags
+
+        return this
+    }
+
+    fun setUser(user: User): Article {
+        this.user = user
+
+        return this
     }
 }

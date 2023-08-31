@@ -11,23 +11,23 @@ import org.springframework.data.relational.core.mapping.Table
 class Comment (
 
     @Id
-    @Column("ID")
+    @Column("id")
     var id: Long? = null,
 
-    @Column("CONTENT")
+    @Column("content")
     var content: String,
 
-    @Column("ARTICLE_ID")
+    @Column("article_id")
     var articleId: Long,
 
-    @Column("IS_DELETED")
+    @Column("is_deleted")
     var isDeleted: Boolean = false,
 
     @CreatedDate
-    @Column("CREATED_AT")
+    @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @LastModifiedDate
-    @Column("UPDATED_AT")
+    @Column("updated_at")
     var updatedAt: LocalDateTime? = null
 )

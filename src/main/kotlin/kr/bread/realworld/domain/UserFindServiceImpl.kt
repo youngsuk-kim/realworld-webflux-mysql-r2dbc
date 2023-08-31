@@ -7,6 +7,7 @@ import kr.bread.realworld.infra.UserRepository
 import kr.bread.realworld.support.exception.InvalidJwtTokenException
 import kr.bread.realworld.support.exception.UserNotFoundException
 import kr.bread.realworld.support.utils.JWTUtils
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -52,7 +53,7 @@ class UserFindServiceImpl(
     }
 
     override suspend fun findByUsername(username: String): UserResult {
-        val user = userRepository.findByUsername(username).awaitSingleOrNull()
+        val user = userRepository.findByUsername(username)?.awaitSingleOrNull()
 
         return UserResult(
             id = user?.id!!,
@@ -61,5 +62,9 @@ class UserFindServiceImpl(
             bio = user.bio,
             image = user.image
         )
+    }
+
+    override suspend fun findUserById(userId: Long): User? {
+        return userRepository.findById(userId)
     }
 }

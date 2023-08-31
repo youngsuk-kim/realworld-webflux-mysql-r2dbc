@@ -27,7 +27,8 @@ DROP TABLE IF EXISTS ARTICLE;
 CREATE TABLE ARTICLE
 (
     id          bigint NOT NULL AUTO_INCREMENT,
-    slug       varchar(255),
+    user_id     bigint NOT NULL,
+    slug        varchar(255),
     title       varchar(255),
     description varchar(500),
     body        mediumtext,
@@ -42,7 +43,7 @@ CREATE TABLE COMMENTS
 (
     id         bigint NOT NULL AUTO_INCREMENT,
     content    mediumtext,
-    articleId  bigint NOT NULL,
+    article_id bigint NOT NULL,
     is_deleted boolean,
     created_at timestamp default NOW(),
     updated_at timestamp default NOW(),
@@ -54,9 +55,19 @@ CREATE TABLE TAG
 (
     id         bigint NOT NULL AUTO_INCREMENT,
     name       VARCHAR(255),
-    articleId  bigint NOT NULL,
+    article_id bigint NOT NULL,
     created_at timestamp default NOW(),
     is_deleted boolean,
     primary key (id)
 );
 
+DROP TABLE IF EXISTS FAVORITE;
+CREATE TABLE FAVORITE
+(
+    id         bigint NOT NULL AUTO_INCREMENT,
+    user_id    bigint NOT NULL,
+    article_id bigint NOT NULL,
+    is_deleted boolean,
+    created_at timestamp default NOW(),
+    primary key (id)
+);

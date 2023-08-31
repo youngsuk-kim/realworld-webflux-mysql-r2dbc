@@ -1,0 +1,31 @@
+# Create Article API
+
+POST http://localhost:8080/api/articles
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJqYXJhIiwic3ViIjoiYXV0aCIsImlhdCI6MTY5MzQ4ODMyMiwiZXhwIjoxNjkzNDkxOTIyLCJlbWFpbCI6Impha2VAamFrZS5qYWtlIiwidXNlcm5hbWUiOiJKYWNvYiIsImJpbyI6IiIsImltYWdlIjoiIn0.5a24hiWcw5yYhVZnUfCPnJ7vRyqyzVpk3i1G12Q3qGU
+Content-Type: application/json
+
+{
+  "article" : {
+    "title": "test-title",
+    "description": "test-description",
+    "body": "test-body",
+    "tagList": [
+      "tag-1-test",
+      "tag-2-test"
+    ]
+  }
+}
+
+###
+
+# Get One Article API
+
+GET http://localhost:8080/api/articles/test-title
+
+###
+
+# Get Multiple Article API
+
+GET http://localhost:8080/api/articles?author=Jacob&limit=1
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJqYXJhIiwic3ViIjoiYXV0aCIsImlhdCI6MTY5MzQ4ODMyMiwiZXhwIjoxNjkzNDkxOTIyLCJlbWFpbCI6Impha2VAamFrZS5qYWtlIiwidXNlcm5hbWUiOiJKYWNvYiIsImJpbyI6IiIsImltYWdlIjoiIn0.5a24hiWcw5yYhVZnUfCPnJ7vRyqyzVpk3i1G12Q3qGU
+Content-Type: application/json

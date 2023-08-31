@@ -10,20 +10,20 @@ import org.springframework.data.relational.core.mapping.Table
 class Follow(
 
     @Id
-    @Column("ID")
+    @Column("id")
     var id: Long? = null,
 
-    @Column("FOLLOWER_ID")
+    @Column("follower_id")
     var followerId: Long,
 
-    @Column("FOLLOWEE_ID")
+    @Column("followee_id")
     var followeeId: Long,
 
-    @Column("UNFOLLOW")
+    @Column("unfollow")
     var unfollow: Boolean = false,
 
     @CreatedDate
-    @Column("CREATED_AT")
+    @Column("created_at")
     var createdAt: LocalDateTime? = LocalDateTime.now(),
 ) {
     fun unfollow() {
