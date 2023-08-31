@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 import kr.bread.realworld.controller.response.UserCurrentHttpResponse
 import kr.bread.realworld.controller.response.UserLoginHttpResponse

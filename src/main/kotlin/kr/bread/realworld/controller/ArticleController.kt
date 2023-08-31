@@ -1,16 +1,21 @@
 package kr.bread.realworld.controller
 
 import kr.bread.realworld.controller.EndpointConstants.CREATE_ARTICLE_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.DELETE_ARTICLE_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.GET_ARTICLE_FEED_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.GET_LIST_ARTICLE_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.GET_ONE_ARTICLE_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.GET_TAGS_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.UPDATE_ARTICLE_ENDPOINT
 import kr.bread.realworld.controller.request.ArticleCreateHttpRequest
-import kr.bread.realworld.domain.Article
-import kr.bread.realworld.domain.ArticleService
-import kr.bread.realworld.domain.SingleArticle
+import kr.bread.realworld.controller.request.ArticleUpdateHttpRequest
+import kr.bread.realworld.domain.article.ArticleService
+import kr.bread.realworld.domain.article.SingleArticle
 import kr.bread.realworld.support.annotation.AuthToken
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -41,7 +46,19 @@ class ArticleController(
         return MultipleArticleNestedHttpWrapper(
             articles, articles.count()
         )
+    }
 
+    @GetMapping(GET_ARTICLE_FEED_ENDPOINT)
+    suspend fun getFeed(
+        @AuthToken token: String,
+        @RequestParam(required = false, defaultValue = "20") limit: Int = 20,
+        @RequestParam(required = false, defaultValue = "0") offset: Int = 0,
+    ): MultipleArticleNestedHttpWrapper<SingleArticle> {
+        val feed = articleService.getFeed(token, limit, offset)
+
+        return MultipleArticleNestedHttpWrapper(
+            feed, feed.count()
+        )
     }
 
     @GetMapping(GET_ONE_ARTICLE_ENDPOINT)
@@ -52,4 +69,26 @@ class ArticleController(
         @AuthToken token: String,
         @RequestBody request: SingleArticleNestedHttpWrapper<ArticleCreateHttpRequest>,
     ) = SingleArticleNestedHttpWrapper(articleService.create(token, request.article.toArticleContent()))
+
+    @PutMapping(UPDATE_ARTICLE_ENDPOINT)
+    suspend fun update(
+        @AuthToken token: String,
+        @PathVariable slug: String,
+        @RequestBody request: SingleArticleNestedHttpWrapper<ArticleUpdateHttpRequest>
+    ) {
+        val (title, description, body) = request.article
+        SingleArticleNestedHttpWrapper(articleService.update(slug, title, description, body))
+    }
+
+    @PutMapping(DELETE_ARTICLE_ENDPOINT)
+    suspend fun delete(
+        @AuthToken token: String,
+        @PathVariable slug: String,
+    ): SingleArticleNestedHttpWrapper<SingleArticle> {
+        return SingleArticleNestedHttpWrapper(articleService.delete(slug))
+    }
+
+    @GetMapping(GET_TAGS_ENDPOINT)
+    suspend fun getTags() = TagNestedHttpWrapper(articleService.findTags())
+
 }

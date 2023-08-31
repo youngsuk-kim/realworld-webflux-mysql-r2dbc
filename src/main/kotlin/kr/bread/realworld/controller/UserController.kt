@@ -9,12 +9,13 @@ import kr.bread.realworld.controller.EndpointConstants.UPDATE_USER_ENDPOINT
 import kr.bread.realworld.controller.request.UserLoginHttpRequest
 import kr.bread.realworld.controller.request.UserRegisterHttpRequest
 import kr.bread.realworld.controller.request.UserUpdateHttpRequest
-import kr.bread.realworld.domain.UserFindService
-import kr.bread.realworld.domain.UserFollowService
-import kr.bread.realworld.domain.UserLoginService
-import kr.bread.realworld.domain.UserRegisterService
-import kr.bread.realworld.domain.UserUpdateService
+import kr.bread.realworld.domain.user.UserFindService
+import kr.bread.realworld.domain.user.UserFollowService
+import kr.bread.realworld.domain.user.UserLoginService
+import kr.bread.realworld.domain.user.UserRegisterService
+import kr.bread.realworld.domain.user.UserUpdateService
 import kr.bread.realworld.support.annotation.AuthToken
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -77,12 +78,21 @@ class UserController(
         ).toUpdateUserResponse()
     )
 
-    @PostMapping(UNFOLLOW_USER_ENDPOINT)
+    @PostMapping(FOLLOW_USER_ENDPOINT)
+    suspend fun followUser(
+        @AuthToken token: String,
+        @PathVariable username: String,
+    ) = ProfileNestedHttpWrapper(
+        userFollowService.follow(token, username).toFollowResponse()
+    )
+
+    @DeleteMapping(UNFOLLOW_USER_ENDPOINT)
     suspend fun unfollowUser(
         @AuthToken token: String,
         @PathVariable username: String,
     ) = ProfileNestedHttpWrapper(
-        userFollowService.follow(token, username).toUnFollowResponse()
+        userFollowService.unfollow(token, username).toUnFollowResponse()
     )
+
 
 }

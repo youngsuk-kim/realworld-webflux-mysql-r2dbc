@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.tag
 
 import java.time.LocalDateTime
 import org.springframework.data.annotation.CreatedDate

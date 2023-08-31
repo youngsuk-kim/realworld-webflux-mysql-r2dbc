@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 import kr.bread.realworld.infra.UserRepository
 import kr.bread.realworld.support.utils.BCryptUtils

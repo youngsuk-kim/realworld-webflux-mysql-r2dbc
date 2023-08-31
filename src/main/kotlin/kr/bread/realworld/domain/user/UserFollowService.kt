@@ -1,7 +1,9 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kr.bread.realworld.infra.FollowRepository
 import kr.bread.realworld.support.exception.NoFollowExistException
@@ -65,6 +67,13 @@ class UserFollowService(
             image = user.image,
             following = false
         )
+    }
+
+    suspend fun findFollowee(token: String): List<Follow> {
+        val follower = userFindService.findByToken(token)
+
+        return followRepository.findByFolloweeId(follower.id)
+            .buffer().toList()
     }
 
     suspend fun findFollow(token: String, followeeUsername: String): ProfileResult {

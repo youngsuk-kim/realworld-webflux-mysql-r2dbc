@@ -1,9 +1,10 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.toSet
+import kr.bread.realworld.domain.Favorite
+import kr.bread.realworld.domain.article.Article
 import kr.bread.realworld.infra.FavoriteRepository
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,6 +1,8 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.article
 
 import java.time.LocalDateTime
+import kr.bread.realworld.domain.user.ProfileResult
+import kr.bread.realworld.domain.user.UserResult
 
 data class SingleArticle (
     val slug: String,

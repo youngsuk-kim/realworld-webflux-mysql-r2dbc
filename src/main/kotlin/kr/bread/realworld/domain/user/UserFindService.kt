@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 interface UserFindService {
     suspend fun findById(userId: Long?): UserResult

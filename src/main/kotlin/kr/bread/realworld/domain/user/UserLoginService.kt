@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kr.bread.realworld.config.JWTProperties

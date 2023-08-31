@@ -1,7 +1,7 @@
 package kr.bread.realworld.infra
 
 import kotlinx.coroutines.flow.Flow
-import kr.bread.realworld.domain.Tag
+import kr.bread.realworld.domain.tag.Tag
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 

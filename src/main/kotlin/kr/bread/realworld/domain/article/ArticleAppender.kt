@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.article
 
 import kr.bread.realworld.infra.ArticleRepository
 import org.springframework.stereotype.Component

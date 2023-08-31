@@ -1,16 +1,11 @@
 package kr.bread.realworld.infra
 
 import kotlinx.coroutines.flow.Flow
-import kr.bread.realworld.domain.Article
-import kr.bread.realworld.domain.ArticleSearchCondition
-import kr.bread.realworld.domain.SingleArticle
-import org.springframework.data.domain.Example
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
+import kr.bread.realworld.domain.article.Article
+import kr.bread.realworld.domain.article.SingleArticle
 import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 interface ArticleRepository: CoroutineCrudRepository<Article, Long>, ReactiveQueryByExampleExecutor<Article> {

@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.article
 
 data class ArticleContent (
     val title: String,

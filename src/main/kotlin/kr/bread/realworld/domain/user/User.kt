@@ -1,6 +1,7 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 import java.time.LocalDateTime
+import kr.bread.realworld.domain.article.Article
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id

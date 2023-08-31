@@ -1,6 +1,6 @@
 package kr.bread.realworld.controller.request
 
-import kr.bread.realworld.domain.ArticleContent
+import kr.bread.realworld.domain.article.ArticleContent
 
 data class ArticleCreateHttpRequest(
     val title: String,

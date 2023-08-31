@@ -25,4 +25,8 @@ class Favorite (
     @CreatedDate
     @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
-)
+) {
+    fun delete() {
+        this.isDeleted = true
+    }
+}

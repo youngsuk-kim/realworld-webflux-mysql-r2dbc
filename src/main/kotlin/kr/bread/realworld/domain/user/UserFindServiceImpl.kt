@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.reactor.awaitSingleOrNull
@@ -7,7 +7,6 @@ import kr.bread.realworld.infra.UserRepository
 import kr.bread.realworld.support.exception.InvalidJwtTokenException
 import kr.bread.realworld.support.exception.UserNotFoundException
 import kr.bread.realworld.support.utils.JWTUtils
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service

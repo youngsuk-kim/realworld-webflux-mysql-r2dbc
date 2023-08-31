@@ -1,11 +1,10 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.tag
 
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.toSet
 import kr.bread.realworld.infra.TagRepository
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,6 +25,10 @@ class TagFinder(
     suspend fun findTagsByArticleId(id: Long): Set<Tag> {
         return tagRepository.findByArticleId(id)
             .buffer().toSet()
+    }
+
+    suspend fun findAll(): Set<Tag> {
+        return tagRepository.findAll().buffer().toSet()
     }
 
 }

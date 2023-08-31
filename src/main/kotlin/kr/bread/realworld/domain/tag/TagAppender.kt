@@ -1,4 +1,4 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.tag
 
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.toList

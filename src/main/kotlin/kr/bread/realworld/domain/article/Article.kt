@@ -1,6 +1,9 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.article
 
 import java.time.LocalDateTime
+import kr.bread.realworld.domain.Favorite
+import kr.bread.realworld.domain.tag.Tag
+import kr.bread.realworld.domain.user.User
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
@@ -70,6 +73,25 @@ class Article(
 
             return lowercase
         }
+    }
+
+    fun update(title: String?, description: String?, body: String?) {
+        if (!title.isNullOrBlank()) {
+            this.title = title
+            this.slug = makeSlug(title)
+        }
+
+        if (!description.isNullOrBlank()) {
+            this.description = description
+        }
+
+        if (!body.isNullOrBlank()) {
+            this.body = body
+        }
+    }
+
+    fun delete() {
+        this.isDeleted = true
     }
 
     fun makeRelation(favorites: Set<Favorite>?, tags: Set<Tag>?): Article {

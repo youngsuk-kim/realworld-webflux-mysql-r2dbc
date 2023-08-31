@@ -1,6 +1,6 @@
 package kr.bread.realworld.infra
 
-import kr.bread.realworld.domain.User
+import kr.bread.realworld.domain.user.User
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import reactor.core.publisher.Mono
 
