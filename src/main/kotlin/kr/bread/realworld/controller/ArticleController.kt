@@ -2,16 +2,20 @@ package kr.bread.realworld.controller
 
 import kr.bread.realworld.controller.EndpointConstants.CREATE_ARTICLE_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.DELETE_ARTICLE_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.FAVORITE_CANCEL_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.FAVORITE_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.GET_ARTICLE_FEED_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.GET_LIST_ARTICLE_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.GET_ONE_ARTICLE_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.GET_TAGS_ENDPOINT
+import kr.bread.realworld.controller.EndpointConstants.UNFOLLOW_USER_ENDPOINT
 import kr.bread.realworld.controller.EndpointConstants.UPDATE_ARTICLE_ENDPOINT
 import kr.bread.realworld.controller.request.ArticleCreateHttpRequest
 import kr.bread.realworld.controller.request.ArticleUpdateHttpRequest
 import kr.bread.realworld.domain.article.ArticleService
 import kr.bread.realworld.domain.article.SingleArticle
 import kr.bread.realworld.support.annotation.AuthToken
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -80,7 +84,7 @@ class ArticleController(
         SingleArticleNestedHttpWrapper(articleService.update(slug, title, description, body))
     }
 
-    @PutMapping(DELETE_ARTICLE_ENDPOINT)
+    @DeleteMapping(UPDATE_ARTICLE_ENDPOINT)
     suspend fun delete(
         @AuthToken token: String,
         @PathVariable slug: String,
@@ -90,5 +94,19 @@ class ArticleController(
 
     @GetMapping(GET_TAGS_ENDPOINT)
     suspend fun getTags() = TagNestedHttpWrapper(articleService.findTags())
+
+    @PostMapping(FAVORITE_ENDPOINT)
+    suspend fun favorite(@AuthToken token: String, @PathVariable slug: String): SingleArticleNestedHttpWrapper<SingleArticle> {
+        return SingleArticleNestedHttpWrapper(
+            articleService.favorite(token, slug)
+        )
+    }
+
+    @DeleteMapping(FAVORITE_CANCEL_ENDPOINT)
+    suspend fun favoriteCancel(@AuthToken token: String, @PathVariable slug: String): SingleArticleNestedHttpWrapper<SingleArticle> {
+        return SingleArticleNestedHttpWrapper(
+            articleService.unFavorite(token, slug)
+        )
+    }
 
 }

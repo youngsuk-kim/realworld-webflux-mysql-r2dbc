@@ -1,21 +1,20 @@
-package kr.bread.realworld.domain
+package kr.bread.realworld.domain.user
 
 import java.time.LocalDateTime
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
-import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
-@Table("COMMENTS")
-class Comment (
+@Table(name = "FAVORITE")
+class Favorite (
 
     @Id
     @Column("id")
     var id: Long? = null,
 
-    @Column("content")
-    var content: String,
+    @Column("user_id")
+    var userId: Long,
 
     @Column("article_id")
     var articleId: Long,
@@ -26,8 +25,8 @@ class Comment (
     @CreatedDate
     @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @LastModifiedDate
-    @Column("updated_at")
-    var updatedAt: LocalDateTime? = null
-)
+) {
+    fun delete() {
+        this.isDeleted = true
+    }
+}

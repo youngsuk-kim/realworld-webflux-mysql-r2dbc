@@ -3,10 +3,8 @@ package kr.bread.realworld.domain.article
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toSet
-import kr.bread.realworld.domain.Favorite
+import kr.bread.realworld.domain.user.Favorite
 import kr.bread.realworld.domain.user.FavoriteFinder
 import kr.bread.realworld.domain.tag.TagAppender
 import kr.bread.realworld.domain.tag.TagFinder

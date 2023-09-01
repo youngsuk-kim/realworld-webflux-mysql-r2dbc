@@ -1,7 +1,7 @@
 package kr.bread.realworld.domain.article
 
 import java.time.LocalDateTime
-import kr.bread.realworld.domain.Favorite
+import kr.bread.realworld.domain.user.Favorite
 import kr.bread.realworld.domain.tag.Tag
 import kr.bread.realworld.domain.user.User
 import org.springframework.beans.factory.annotation.Value

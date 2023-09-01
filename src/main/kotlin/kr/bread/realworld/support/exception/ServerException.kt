@@ -44,3 +44,7 @@ data class ArticleNotFoundException(
 data class TagNotFoundException(
     override val message: String = "no tag exists.",
 ) : ServerException(404, message)
+
+data class CommentNotFoundException(
+    override val message: String = "no comment exists.",
+) : ServerException(404, message)

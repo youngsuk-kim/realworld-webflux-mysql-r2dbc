@@ -7,7 +7,7 @@ data class ProfileResult(
     val username: String,
     val bio: String?,
     val image: String?,
-    val following: Boolean
+    val following: Boolean = false
 ) {
     fun toFollowResponse(): UserFollowHttpResponse {
         return UserFollowHttpResponse(

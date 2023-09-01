@@ -42,8 +42,9 @@ DROP TABLE IF EXISTS COMMENTS;
 CREATE TABLE COMMENTS
 (
     id         bigint NOT NULL AUTO_INCREMENT,
-    content    mediumtext,
+    body    mediumtext,
     article_id bigint NOT NULL,
+    user_id bigint NOT NULL,
     is_deleted boolean,
     created_at timestamp default NOW(),
     updated_at timestamp default NOW(),

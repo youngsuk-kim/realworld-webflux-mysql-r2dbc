@@ -14,4 +14,9 @@ object EndpointConstants {
     const val UPDATE_ARTICLE_ENDPOINT = "/api/articles/{slug}"
     const val DELETE_ARTICLE_ENDPOINT = "/api/articles/{slug}"
     const val GET_TAGS_ENDPOINT = "/api/tags"
+    const val FAVORITE_ENDPOINT = "/api/articles/{slug}/favorite"
+    const val FAVORITE_CANCEL_ENDPOINT = "/api/articles/{slug}/favorite"
+    const val CREATE_COMMENT_ENDPOINT = "/api/articles/{slug}/comments"
+    const val GET_COMMENTS_ENDPOINT = "/api/articles/{slug}/comments"
+    const val DELETE_COMMENT_ENDPOINT = "/api/articles/{slug}/comments/{id}"
 }
