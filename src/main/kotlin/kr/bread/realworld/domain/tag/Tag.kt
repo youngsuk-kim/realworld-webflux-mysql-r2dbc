@@ -1,10 +1,10 @@
 package kr.bread.realworld.domain.tag
 
-import java.time.LocalDateTime
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDateTime
 
 @Table("TAG")
 class Tag(
@@ -22,7 +22,4 @@ class Tag(
     @CreatedDate
     @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column("is_deleted")
-    var isDeleted: Boolean = false,
 )

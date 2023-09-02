@@ -3,8 +3,9 @@ package kr.bread.realworld.support.utils
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
+import kr.bread.realworld.support.JWTProperties
 import java.util.Date
-import kr.bread.realworld.config.JWTProperties
+import kr.bread.realworld.support.exception.InvalidJwtTokenException
 
 object JWTUtils {
 
@@ -20,7 +21,14 @@ object JWTUtils {
             .withClaim("image", claim.image)
             .sign(Algorithm.HMAC256(properties.secret))
 
-    fun decode(token: String, secret: String, issuer: String): DecodedJWT {
+    fun findEmail(token: String, properties: JWTProperties): String {
+        val email = decode(token, properties.secret, properties.issuer)
+            .claims["email"]?.asString() ?: throw InvalidJwtTokenException()
+
+        return email
+    }
+
+    private fun decode(token: String, secret: String, issuer: String): DecodedJWT {
         val algorithm = Algorithm.HMAC256(secret)
 
         val verifier = JWT.require(algorithm)
@@ -29,7 +37,6 @@ object JWTUtils {
 
         return verifier.verify(token)
     }
-
 }
 
 data class JWTClaim(

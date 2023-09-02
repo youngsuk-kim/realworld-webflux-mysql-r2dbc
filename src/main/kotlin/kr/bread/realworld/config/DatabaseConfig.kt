@@ -19,7 +19,7 @@ class DatabaseConfig {
             setConnectionFactory(connectionFactory)
             setDatabasePopulator(ResourceDatabasePopulator(ClassPathResource(INITIAL_SCHEMA_DIR)))
         }.also {
-            log.info { "Schema init completed in <<directory : ${INITIAL_SCHEMA_DIR}>>" }
+            log.info { "Schema init completed in <<directory : $INITIAL_SCHEMA_DIR>>" }
         }
     }
 

@@ -9,27 +9,17 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserUpdateService(
-    private val userFindService: UserFindService,
-    private val userRepository: UserRepository
+    private val userFinder: UserFinder,
+    private val userAppender: UserAppender
 ) {
+    suspend fun update(token: String, userContent: UserContent): UserResult {
+        val userResult = userFinder.findByToken(token)
+        if (userResult.email == userContent.email) throw EmailAlreadyRegisterException()
 
-    @Transactional
-    suspend fun update(token: String, email: String?, bio: String?, image: String?): UserResult {
-        val userResult = userFindService.findByToken(token)
-        if (userResult.email == email) throw EmailAlreadyRegisterException()
+        val user = userFinder.findByEmail(userResult.email)
+            .update(userContent.email, userContent.bio, userContent.image)
+            .run { userAppender.save(this) }
 
-        val user = userRepository.findByEmail(userResult.email)
-            .awaitFirstOrNull() ?: throw UserNotFoundException()
-        user.update(email, bio, image)
-
-        val saveUser = userRepository.save(user)
-
-        return UserResult(
-            id = saveUser.id!!,
-            email = saveUser.email,
-            username = saveUser.username,
-            bio = saveUser.bio,
-            image = saveUser.image
-        )
+        return UserResult.of(user, token)
     }
 }

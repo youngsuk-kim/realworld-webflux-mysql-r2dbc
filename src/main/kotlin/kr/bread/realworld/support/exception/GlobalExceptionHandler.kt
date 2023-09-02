@@ -20,7 +20,6 @@ internal class GlobalExceptionHandler(
     private val logger = KotlinLogging.logger {}
 
     override fun handle(exchange: ServerWebExchange, ex: Throwable): Mono<Void> = mono {
-
         logger.error { ex.printStackTrace() }
 
         val errorResponse = if (ex is ServerException) {
@@ -37,6 +36,4 @@ internal class GlobalExceptionHandler(
             writeWith(dataBuffer.toMono()).awaitSingle()
         }
     }
-
-
 }

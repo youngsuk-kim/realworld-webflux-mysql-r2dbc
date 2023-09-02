@@ -8,24 +8,23 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kr.bread.realworld.domain.article.ArticleFinder
-import kr.bread.realworld.domain.user.UserFindService
-import kr.bread.realworld.domain.user.UserFollowService
+import kr.bread.realworld.domain.follow.FollowService
 import kr.bread.realworld.infra.CommentRepository
 import kr.bread.realworld.support.exception.CommentNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
 class CommentService(
-    private val userFindService: UserFindService,
+    private val userFindServiceIn: UserFindServiceIn,
     private val articleFinder: ArticleFinder,
     private val commentRepository: CommentRepository,
-    private val followService: UserFollowService
+    private val followService: FollowService
 ) {
 
-    suspend fun save(token: String, body: String, slug: String): SingleComment {
-        val singleComment = coroutineScope {
+    suspend fun save(token: String, body: String, slug: String): CommentResult {
+        val commentResult = coroutineScope {
             val deferredUser = async {
-                userFindService.findByToken(token)
+                userFindServiceIn.findByToken(token)
             }.await()
 
             val deferredArticle = async {
@@ -38,21 +37,21 @@ class CommentService(
 
             val profileResult = followService.findFollow(token, deferredUser.username)
 
-            SingleComment.of(comment, profileResult)
+            CommentResult.of(comment, profileResult)
         }
 
-        return singleComment
+        return commentResult
     }
 
-    suspend fun findBySlug(token: String?, slug: String): List<SingleComment> {
+    suspend fun findBySlug(token: String?, slug: String): List<CommentResult> {
         val article = articleFinder.findBySlug(slug)
         val comments = commentRepository.findByArticleId(article.id!!)
 
         return comments.map { comment ->
-            val user = userFindService.findById(article.userId)
+            val user = userFindServiceIn.findById(article.userId)
             val userResult = token?.let { followService.findFollow(token, user.username) }
 
-            SingleComment.of(comment, userResult)
+            CommentResult.of(comment, userResult)
         }.buffer().toList()
     }
 

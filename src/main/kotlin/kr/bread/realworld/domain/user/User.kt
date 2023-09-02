@@ -1,6 +1,5 @@
 package kr.bread.realworld.domain.user
 
-import java.time.LocalDateTime
 import kr.bread.realworld.domain.article.Article
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.CreatedDate
@@ -9,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDateTime
 
 @Table(name = "USERS")
 class User(
@@ -51,10 +51,9 @@ class User(
          */
         fun of(username: String, email: String, password: String) =
             User(username = username, email = email, password = password)
-
     }
 
-    fun update(email: String?, bio: String?, image: String?) {
+    fun update(email: String?, bio: String?, image: String?): User {
         if (!email.isNullOrBlank()) {
             this.email = email
         }
@@ -66,6 +65,7 @@ class User(
         if (!image.isNullOrBlank()) {
             this.image = image
         }
-    }
 
+        return this
+    }
 }

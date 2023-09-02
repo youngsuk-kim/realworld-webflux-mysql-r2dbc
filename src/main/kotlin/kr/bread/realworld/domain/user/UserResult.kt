@@ -1,9 +1,9 @@
 package kr.bread.realworld.domain.user
 
-import kr.bread.realworld.controller.response.UserCurrentHttpResponse
-import kr.bread.realworld.controller.response.UserLoginHttpResponse
-import kr.bread.realworld.controller.response.UserRegisterHttpResponse
-import kr.bread.realworld.controller.response.UserUpdateHttpResponse
+import kr.bread.realworld.provider.response.UserCurrentHttpResponse
+import kr.bread.realworld.provider.response.UserLoginHttpResponse
+import kr.bread.realworld.provider.response.UserRegisterHttpResponse
+import kr.bread.realworld.provider.response.UserUpdateHttpResponse
 
 data class UserResult(
     val id: Long,
@@ -11,7 +11,7 @@ data class UserResult(
     val token: String? = null,
     val username: String,
     val bio: String?,
-    val image: String? = null,
+    val image: String? = null
 ) {
 
     companion object {
@@ -22,6 +22,26 @@ data class UserResult(
                 token = token,
                 username = user.username,
                 bio = user.bio
+            )
+        }
+
+        fun of(user: User?): UserResult {
+            return UserResult(
+                id = user?.id!!,
+                email = user.email,
+                username = user.username,
+                bio = user.bio
+            )
+        }
+
+        fun toUser(userResult: UserResult): User {
+            return User(
+                username = userResult.username,
+                email = userResult.email,
+                bio = userResult.bio,
+                image = userResult.image,
+                id = userResult.id,
+                password = ""
             )
         }
     }

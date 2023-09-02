@@ -1,14 +1,14 @@
 package kr.bread.realworld.domain.comment
 
-import java.time.LocalDateTime
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDateTime
 
 @Table("COMMENTS")
-class Comment (
+class Comment(
 
     @Id
     @Column("id")

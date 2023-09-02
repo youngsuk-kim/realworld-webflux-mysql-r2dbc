@@ -12,11 +12,6 @@ class TagFinder(
     private val tagRepository: TagRepository
 ) {
 
-    suspend fun getArticleIdsBy(tagName: String): List<Long> {
-        return tagRepository.findByName(tagName).buffer()
-            .map { it.articleId }.toList()
-    }
-
     suspend fun findByArticleId(id: Long): Set<String> {
         return tagRepository.findByArticleId(id)
             .buffer().map { it.name }.toSet()
@@ -30,5 +25,4 @@ class TagFinder(
     suspend fun findAll(): Set<Tag> {
         return tagRepository.findAll().buffer().toSet()
     }
-
 }

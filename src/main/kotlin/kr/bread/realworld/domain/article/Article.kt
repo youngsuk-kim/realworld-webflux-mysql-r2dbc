@@ -1,7 +1,6 @@
 package kr.bread.realworld.domain.article
 
-import java.time.LocalDateTime
-import kr.bread.realworld.domain.user.Favorite
+import kr.bread.realworld.domain.favorite.Favorite
 import kr.bread.realworld.domain.tag.Tag
 import kr.bread.realworld.domain.user.User
 import org.springframework.beans.factory.annotation.Value
@@ -11,8 +10,9 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDateTime
 
-@Table("ARTICLE")
+@Table("article")
 class Article(
 
     @Id
@@ -39,11 +39,11 @@ class Article(
 
     @CreatedDate
     @Column("created_at")
-    var createdAt: LocalDateTime? = null,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @LastModifiedDate
     @Column("updated_at")
-    var updatedAt: LocalDateTime? = null,
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
 
     @Transient
     @Value("null")
@@ -55,13 +55,18 @@ class Article(
 
     @Transient
     @Value("null")
-    var tags: Set<Tag>? = null
+    var tags: Set<Tag>? = null,
 ) {
 
     companion object {
         fun of(articleContent: ArticleContent, userId: Long): Article {
-            val (title, description, body, _) = articleContent
-            return Article(title = title, description = description, body = body, slug = makeSlug(title), userId = userId)
+            return Article(
+                title = articleContent.title,
+                description = articleContent.description,
+                body = articleContent.body,
+                slug = makeSlug(articleContent.title),
+                userId = userId
+            )
         }
 
         private fun makeSlug(title: String): String {
@@ -90,9 +95,13 @@ class Article(
         }
     }
 
-    fun delete() {
+    fun delete(): Article {
         this.isDeleted = true
+
+        return this
     }
+
+    fun getFavoriteCount() = this.favorites?.count()
 
     fun makeRelation(favorites: Set<Favorite>?, tags: Set<Tag>?): Article {
         this.favorites = favorites

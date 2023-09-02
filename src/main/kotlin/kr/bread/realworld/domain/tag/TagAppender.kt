@@ -2,6 +2,7 @@ package kr.bread.realworld.domain.tag
 
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.toSet
 import kr.bread.realworld.infra.TagRepository
 import org.springframework.stereotype.Component
 
@@ -9,14 +10,10 @@ import org.springframework.stereotype.Component
 class TagAppender(
     private val tagRepository: TagRepository
 ) {
-    suspend fun append(tag: Tag): Tag {
-        return tagRepository.save(tag)
-    }
-
-    suspend fun appendAll(tagNames: List<String>?, articleId: Long): List<Tag> {
-        if (tagNames.isNullOrEmpty()) return emptyList()
+    suspend fun appendAll(tagNames: Set<String>?, articleId: Long): Set<Tag> {
+        if (tagNames.isNullOrEmpty()) return emptySet()
 
         return tagRepository.saveAll(tagNames.map { Tag(name = it, articleId = articleId) })
-            .buffer().toList()
+            .buffer().toSet()
     }
 }

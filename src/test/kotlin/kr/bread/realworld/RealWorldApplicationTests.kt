@@ -9,5 +9,4 @@ class RealWorldApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }
