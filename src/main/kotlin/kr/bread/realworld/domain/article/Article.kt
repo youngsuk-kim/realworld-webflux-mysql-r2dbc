@@ -17,7 +17,7 @@ class Article(
 
     @Id
     @Column("id")
-    var id: Long? = null,
+    val id: Long? = null,
 
     @Column("slug")
     var slug: String,
@@ -47,16 +47,31 @@ class Article(
 
     @Transient
     @Value("null")
-    var user: User? = null,
+    val user: User? = null,
 
     @Transient
     @Value("null")
-    var favorites: Set<Favorite>? = null,
+    var favorites: Set<Favorite> = emptySet(),
 
     @Transient
     @Value("null")
     var tags: Set<Tag>? = null
 ) {
+
+    fun of(user: User, favorites: Set<Favorite>, tags: Set<Tag>?): Article {
+        return Article(
+            slug = this.slug,
+            title = this.title,
+            description = this.description,
+            userId = this.userId,
+            body = this.body,
+            createdAt = this.createdAt,
+            updatedAt = this.updatedAt,
+            user = user,
+            favorites = favorites,
+            tags = tags
+        )
+    }
 
     companion object {
         fun of(articleContent: ArticleContent, userId: Long): Article {
@@ -80,10 +95,25 @@ class Article(
         }
     }
 
-    fun update(title: String?, description: String?, body: String?) {
+    fun id(): Long {
+        requireNotNull(this.id) { "id cannot be null" }
+        return this.id
+    }
+
+    fun checkSameAuthor(userId: Long): Boolean {
+        return this.userId == userId
+    }
+
+    fun checkSameAuthor(username: String): Boolean {
+        requireNotNull(this.user) { "user cannot be null" }
+        return this.user.checkSameUser(username)
+    }
+
+    fun update(articleUpdateContent: ArticleUpdateContent): Article {
+        val (slug, title, description, body) = articleUpdateContent
         if (!title.isNullOrBlank()) {
             this.title = title
-            this.slug = makeSlug(title)
+            this.slug = slug
         }
 
         if (!description.isNullOrBlank()) {
@@ -93,6 +123,8 @@ class Article(
         if (!body.isNullOrBlank()) {
             this.body = body
         }
+
+        return this
     }
 
     fun delete(): Article {
@@ -101,18 +133,5 @@ class Article(
         return this
     }
 
-    fun getFavoriteCount() = this.favorites?.count()
-
-    fun makeRelation(favorites: Set<Favorite>?, tags: Set<Tag>?): Article {
-        this.favorites = favorites
-        this.tags = tags
-
-        return this
-    }
-
-    fun setUser(user: User): Article {
-        this.user = user
-
-        return this
-    }
+    fun favoriteCount() = this.favorites.count()
 }

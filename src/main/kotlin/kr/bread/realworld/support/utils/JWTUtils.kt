@@ -7,6 +7,10 @@ import kr.bread.realworld.support.JWTProperties
 import kr.bread.realworld.support.exception.InvalidJwtTokenException
 import java.util.Date
 
+private const val EMAIL = "email"
+
+private const val EXPIRE_TIME = 3600 * 24 // 1 hour * 24
+
 object JWTUtils {
 
     fun createToken(claim: JWTClaim, properties: JWTProperties): String =
@@ -14,18 +18,13 @@ object JWTUtils {
             .withIssuer(properties.issuer)
             .withSubject(properties.subject)
             .withIssuedAt(Date())
-            .withExpiresAt(Date(Date().time + properties.expiresTime * 1000))
-            .withClaim("email", claim.email)
-            .withClaim("username", claim.username)
-            .withClaim("bio", claim.bio)
-            .withClaim("image", claim.image)
+            .withExpiresAt(Date(Date().time + EXPIRE_TIME))
+            .withClaim(EMAIL, claim.email)
             .sign(Algorithm.HMAC256(properties.secret))
 
     fun findEmail(token: String, properties: JWTProperties): String {
-        val email = decode(token, properties.secret, properties.issuer)
-            .claims["email"]?.asString() ?: throw InvalidJwtTokenException()
-
-        return email
+        return decode(token, properties.secret, properties.issuer)
+            .claims[EMAIL]?.asString() ?: throw InvalidJwtTokenException()
     }
 
     private fun decode(token: String, secret: String, issuer: String): DecodedJWT {
@@ -40,8 +39,5 @@ object JWTUtils {
 }
 
 data class JWTClaim(
-    val email: String,
-    val username: String,
-    val image: String = "",
-    val bio: String = ""
+    val email: String
 )

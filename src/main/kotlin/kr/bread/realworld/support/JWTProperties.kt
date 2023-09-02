@@ -6,6 +6,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 data class JWTProperties(
     val issuer: String,
     val subject: String,
-    val expiresTime: Long,
     val secret: String
 )

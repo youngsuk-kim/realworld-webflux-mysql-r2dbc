@@ -11,7 +11,7 @@ class Follow(
 
     @Id
     @Column("id")
-    var id: Long? = null,
+    val id: Long? = null,
 
     @Column("follower_id")
     var followerId: Long,
@@ -26,6 +26,11 @@ class Follow(
     @Column("created_at")
     var createdAt: LocalDateTime? = LocalDateTime.now()
 ) {
+    fun id(): Long {
+        requireNotNull(this.id) { "id cannot be null" }
+        return this.id
+    }
+
     fun unfollow() {
         this.unfollow = true
     }

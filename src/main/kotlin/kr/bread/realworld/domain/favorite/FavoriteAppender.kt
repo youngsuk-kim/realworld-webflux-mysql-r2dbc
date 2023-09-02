@@ -7,7 +7,5 @@ import org.springframework.stereotype.Component
 class FavoriteAppender(
     private val favoriteRepository: FavoriteRepository
 ) {
-    suspend fun save(favorite: Favorite) {
-        favoriteRepository.save(favorite)
-    }
+    suspend fun save(favorite: Favorite) = favoriteRepository.save(favorite)
 }

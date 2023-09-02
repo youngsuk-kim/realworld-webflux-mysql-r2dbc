@@ -10,8 +10,11 @@ class FavoriteFinder(
     private val favoriteRepository: FavoriteRepository
 ) {
 
-    suspend fun findByArticleId(id: Long): Set<Favorite> {
-        return favoriteRepository.findByArticleId(id)
-            .buffer().toSet()
-    }
+    suspend fun findByArticleId(id: Long): Set<Favorite> =
+        favoriteRepository.findByArticleId(id).buffer().toSet()
+
+    suspend fun isFavoriteArticle(articleId: Long, userId: Long) =
+        favoriteRepository.existsByUserIdAndArticleId(articleId, userId)
+
+    suspend fun countFavorite(articleId: Long) = favoriteRepository.countByArticleId(articleId)
 }

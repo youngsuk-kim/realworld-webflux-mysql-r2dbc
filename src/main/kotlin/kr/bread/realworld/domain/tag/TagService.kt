@@ -6,8 +6,5 @@ import org.springframework.stereotype.Service
 class TagService(
     private val tagFinder: TagFinder
 ) {
-    suspend fun findTags(): List<String> {
-        return tagFinder.findAll()
-            .map { it.name }
-    }
+    suspend fun getAll() = tagFinder.findAll().map { it.name }
 }

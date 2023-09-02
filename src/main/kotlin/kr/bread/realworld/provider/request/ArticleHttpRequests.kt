@@ -9,7 +9,12 @@ data class ArticleCreateHttpRequest(
     val tagNames: Set<String>
 ) {
     fun toArticleContent(): ArticleContent {
-        return ArticleContent(title = title, description = description, body = body, tagNames = tagNames)
+        return ArticleContent(
+            title = title,
+            description = description,
+            body = body,
+            tagNames = tagNames
+        )
     }
 }
 

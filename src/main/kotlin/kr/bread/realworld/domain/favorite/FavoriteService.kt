@@ -22,24 +22,24 @@ class FavoriteService(
             }
 
             val articleDeferred = async {
-                articleFinder.findBySlug(slug)
+                articleFinder.findOne(slug)
             }
 
-            Favorite(userId = userResultDeferred.await().id, articleId = articleDeferred.await().id!!)
+            Favorite(userId = userResultDeferred.await().id(), articleId = articleDeferred.await().id())
         }
 
         favoriteAppender.save(favorite)
 
-        return articleFinder.findOneArticle(slug)
+        return articleFinder.findOne(token, slug)
     }
 
     suspend fun unFavorite(token: String, slug: String): ArticleResult {
-        val article = articleFinder.findBySlug(slug)
+        val article = articleFinder.findOne(slug)
         val favorite = favoriteFinder.findByArticleId(article.id!!).first()
         favorite.delete()
 
         favoriteAppender.save(favorite)
 
-        return articleFinder.findOneArticle(slug)
+        return articleFinder.findOne(token, slug)
     }
 }

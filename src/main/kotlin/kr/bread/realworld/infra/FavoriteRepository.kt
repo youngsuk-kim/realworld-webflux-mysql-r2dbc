@@ -6,4 +6,6 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 
 interface FavoriteRepository : CoroutineCrudRepository<Favorite, Long> {
     fun findByArticleId(articleId: Long): Flow<Favorite>
+    fun existsByUserIdAndArticleId(userId: Long, articleId: Long): Boolean
+    fun countByArticleId(articleId: Long): Int
 }

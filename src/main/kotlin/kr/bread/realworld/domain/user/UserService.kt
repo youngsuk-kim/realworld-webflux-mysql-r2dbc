@@ -4,7 +4,7 @@ import kr.bread.realworld.support.exception.EmailAlreadyRegisterException
 import org.springframework.stereotype.Service
 
 @Service
-class UserUpdateService(
+class UserService(
     private val userFinder: UserFinder,
     private val userAppender: UserAppender
 ) {
@@ -18,4 +18,6 @@ class UserUpdateService(
 
         return UserResult.of(user, token)
     }
+
+    suspend fun getOne(token: String) = UserResult.of(userFinder.findByToken(token))
 }

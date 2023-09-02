@@ -1,6 +1,6 @@
 package kr.bread.realworld.provider
 
-object ApiEndpoints {
+object Endpoints {
     /**
      * Auth
      */

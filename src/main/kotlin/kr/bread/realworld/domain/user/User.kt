@@ -10,12 +10,12 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
-@Table(name = "USERS")
+@Table(name = "users")
 class User(
 
     @Id
     @Column("id")
-    var id: Long? = null,
+    val id: Long? = null,
 
     @Column("username")
     var username: String,
@@ -53,6 +53,11 @@ class User(
             User(username = username, email = email, password = password)
     }
 
+    fun id(): Long {
+        requireNotNull(this.id) { "id cannot be null" }
+        return this.id
+    }
+
     fun update(email: String?, bio: String?, image: String?): User {
         if (!email.isNullOrBlank()) {
             this.email = email
@@ -67,5 +72,9 @@ class User(
         }
 
         return this
+    }
+
+    fun checkSameUser(username: String): Boolean {
+        return this.username == username
     }
 }

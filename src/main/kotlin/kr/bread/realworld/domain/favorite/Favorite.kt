@@ -11,7 +11,7 @@ class Favorite(
 
     @Id
     @Column("id")
-    var id: Long? = null,
+    val id: Long? = null,
 
     @Column("user_id")
     var userId: Long,
@@ -26,7 +26,10 @@ class Favorite(
     @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now()
 ) {
-    fun delete() {
-        this.isDeleted = true
+    fun id(): Long {
+        requireNotNull(this.id) { "id cannot be null" }
+        return this.id
     }
+
+    fun delete() = !this.isDeleted
 }

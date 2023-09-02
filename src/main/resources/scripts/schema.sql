@@ -62,8 +62,8 @@ CREATE TABLE tag
     primary key (id)
 );
 
-DROP TABLE IF EXISTS favoite;
-CREATE TABLE favoite
+DROP TABLE IF EXISTS favorite;
+CREATE TABLE favorite
 (
     id         bigint NOT NULL AUTO_INCREMENT,
     user_id    bigint NOT NULL,

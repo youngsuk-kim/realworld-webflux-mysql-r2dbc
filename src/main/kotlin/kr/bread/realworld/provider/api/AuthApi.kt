@@ -1,7 +1,8 @@
 package kr.bread.realworld.provider.api
 
-import kr.bread.realworld.domain.user.AuthService
-import kr.bread.realworld.provider.ApiEndpoints
+import kr.bread.realworld.domain.auth.AuthService
+import kr.bread.realworld.provider.Endpoints.LOGIN_ENDPOINT
+import kr.bread.realworld.provider.Endpoints.REGISTER_ENDPOINT
 import kr.bread.realworld.provider.UserNestedHttpWrapper
 import kr.bread.realworld.provider.request.AuthLoginHttpRequest
 import kr.bread.realworld.provider.request.AuthRegisterHttpRequest
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 class AuthApi(
     private val authService: AuthService
 ) {
-    @PostMapping(ApiEndpoints.REGISTER_ENDPOINT)
+    @PostMapping(REGISTER_ENDPOINT)
     suspend fun register(
         @RequestBody
         request: UserNestedHttpWrapper<AuthRegisterHttpRequest>
@@ -27,7 +28,7 @@ class AuthApi(
             .toRegisterResponse()
     )
 
-    @PostMapping(ApiEndpoints.LOGIN_ENDPOINT)
+    @PostMapping(LOGIN_ENDPOINT)
     suspend fun login(
         @RequestBody
         request: UserNestedHttpWrapper<AuthLoginHttpRequest>

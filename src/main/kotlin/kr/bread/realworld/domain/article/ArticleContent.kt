@@ -25,3 +25,10 @@ data class ArticleContent(
         }
     }
 }
+
+data class ArticleUpdateContent(
+    val slug: String,
+    val title: String?,
+    val description: String?,
+    val body: String?
+)

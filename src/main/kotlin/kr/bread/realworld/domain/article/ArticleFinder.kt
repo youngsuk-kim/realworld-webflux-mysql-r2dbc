@@ -1,7 +1,5 @@
 package kr.bread.realworld.domain.article
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
@@ -10,13 +8,14 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toSet
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kr.bread.realworld.domain.favorite.FavoriteFinder
+import kr.bread.realworld.domain.follow.FollowFinder
 import kr.bread.realworld.domain.tag.TagFinder
+import kr.bread.realworld.domain.user.User
 import kr.bread.realworld.domain.user.UserFinder
 import kr.bread.realworld.domain.user.UserResult
 import kr.bread.realworld.infra.ArticleRepository
 import kr.bread.realworld.support.exception.ArticleNotFoundException
 import kr.bread.realworld.support.exception.TagNotFoundException
-import kr.bread.realworld.support.exception.UserNotFoundException
 import org.springframework.stereotype.Component
 
 @Component
@@ -24,95 +23,120 @@ class ArticleFinder(
     private val articleRepository: ArticleRepository,
     private val userFinder: UserFinder,
     private val tagFinder: TagFinder,
-    private val favoriteFinder: FavoriteFinder
+    private val favoriteFinder: FavoriteFinder,
+    private val followFinder: FollowFinder
 ) {
 
-    suspend fun findAllArticle(
-        offset: Int,
-        limit: Int,
-        tag: String?,
-        author: String?,
-        favorited: String?
+    suspend fun findUsingPagingFilterByCondition(
+        articlePaging: ArticlePaging,
+        articleFilterCondition: ArticleFilterCondition
     ): Set<Article> {
-        var articles = articleRepository.findAll()
-            .map { it.makeRelation(favoriteFinder.findByArticleId(it.id!!), tagFinder.findTagsByArticleId(it.id!!)) }
-            .map { it.setUser(userFinder.findUserById(it.userId) ?: throw UserNotFoundException()) }
+        var articles = createArticles()
 
-        articles = filterBy(tag, articles, author, favorited)
+        articles = filterBy(articles, articleFilterCondition)
 
         return articles
-            .drop(offset)
-            .take(limit).toSet()
+            .drop(articlePaging.offset)
+            .take(articlePaging.limit).toSet()
     }
 
-    suspend fun findAllArticle(
+    private fun createArticles() = articleRepository.findAll()
+        .map { article ->
+            with(article) {
+                article.of(
+                    user = userFinder.findById(userId),
+                    favorites = favoriteFinder.findByArticleId(id()),
+                    tags = tagFinder.findAll(id())
+                )
+            }
+        }
+
+    suspend fun findUsingPagingFilterByAuthor(
         userId: Long,
-        offset: Int,
-        limit: Int
+        articlePaging: ArticlePaging
     ): Set<Article> {
         return articleRepository.findAll()
-            .filter { it.userId == userId }
-            .drop(offset)
-            .take(limit).toSet()
+            .filter { it.checkSameAuthor(userId) }
+            .drop(articlePaging.offset)
+            .take(articlePaging.limit)
+            .toSet()
     }
 
-    suspend fun findBySlug(slug: String): Article {
+    suspend fun findOne(slug: String): Article {
         return articleRepository.findBySlug(slug)
             .awaitSingleOrNull() ?: throw ArticleNotFoundException()
     }
 
-    suspend fun findOneArticle(slug: String): ArticleResult {
-        val articleResult = coroutineScope {
-            val article = async {
-                findBySlug(slug)
-            }.await()
-
-            async {
-                val author = userFinder
-                    .findById(article.userId)
-                val favoritesCount = favoriteFinder
-                    .findByArticleId(article.id!!)
-                    .count()
-                val tags = tagFinder
-                    .findByArticleId(article.id!!)
-
-                ArticleResult.of(
-                    articleContent = ArticleContent.of(article),
-                    favoritesCount = article.getFavoriteCount(),
-                    userResult = UserResult.of(article.user)
-                )
-            }.await()
+    private suspend fun filterBy(
+        articles: Flow<Article>,
+        condition: ArticleFilterCondition
+    ): Flow<Article> {
+        fun filterByTag() = articles.filter { article ->
+            article.tags?.map { it.name }?.contains(condition.tag) ?: throw TagNotFoundException()
         }
 
-        return articleResult
+        fun filterByAuthor() = articles.filter {
+            checkNotNull(condition.author) { "author cannot be null" }
+            it.checkSameAuthor(condition.author)
+        }
+
+        fun filterByFavorited(user: User): Flow<Article> {
+            return articles.filter { article ->
+                article.favorites.map { it.userId }.contains(user.id)
+            }
+        }
+
+        if (condition.tag != null) {
+            filterByTag()
+        }
+
+        if (condition.author != null) {
+            filterByAuthor()
+        }
+
+        if (condition.favorited != null) {
+            val user = userFinder.findByUsername(condition.favorited)
+            filterByFavorited(user)
+        }
+        return articles
     }
 
-    private suspend fun filterBy(
-        tag: String?,
-        articles: Flow<Article>,
-        author: String?,
-        favorited: String?
-    ): Flow<Article> {
-        var filterArticles = articles
+    suspend fun findOne(token: String?, slug: String): ArticleResult {
+        val article = findOne(slug)
+        val favoriteCount = favoriteFinder.countFavorite(article.id())
+        val author = userFinder.findById(article.userId)
 
-        if (tag != null) {
-            filterArticles = articles.filter {
-                it.tags?.map { it.name }?.contains(tag) ?: throw TagNotFoundException()
-            }
+        if (!token.isNullOrBlank()) {
+            return loginUserArticleResult(token, article, favoriteCount, author)
         }
 
-        if (author != null) {
-            filterArticles = articles.filter {
-                it.user?.username == author
-            }
-        }
+        return ArticleResult.of(
+            articleContent = ArticleContent.of(article),
+            favoritesCount = favoriteCount,
+            followAuthor = false,
+            author = UserResult.of(author),
+            favorited = false
+        )
+    }
 
-        if (favorited != null) {
-            val user = userFinder.findByUsername(favorited)
-            filterArticles = articles.filter { article ->
-                article.favorites?.map { it.userId }?.contains(user.id) ?: throw UserNotFoundException()
-            }
-        }
-        return filterArticles
+    private suspend fun loginUserArticleResult(
+        token: String?,
+        article: Article,
+        favoriteCount: Int,
+        author: User
+    ): ArticleResult {
+        requireNotNull(token) { "token cannot be null" }
+
+        val user = userFinder.findByToken(token)
+        val isFollower = followFinder.isFollower(user.id(), article.id())
+        val isFavoriteArticle = favoriteFinder.isFavoriteArticle(article.id(), user.id())
+
+        return ArticleResult.of(
+            articleContent = ArticleContent.of(article),
+            favoritesCount = favoriteCount,
+            followAuthor = isFollower,
+            author = UserResult.of(author),
+            favorited = isFavoriteArticle
+        )
     }
 }

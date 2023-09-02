@@ -24,41 +24,40 @@ class CommentService(
 
     suspend fun save(token: String, body: String, slug: String): CommentResult {
         val commentResult = coroutineScope {
-            val deferredUser = async {
-                userFinder.findByToken(token)
-            }.await()
+            val deferredUser = async { userFinder.findByToken(token) }
+            val deferredArticle = async { articleFinder.findOne(slug) }
 
-            val deferredArticle = async {
-                articleFinder.findBySlug(slug)
-            }.await()
-            val comment =
-                Comment(body = body, articleId = deferredArticle.id!!, userId = deferredUser.id)
+            val comment = Comment(
+                body = body,
+                articleId = deferredArticle.await().id(),
+                userId = deferredUser.await().id()
+            )
 
             commentRepository.save(comment)
 
-            val profileResult = followService.findFollow(token, deferredUser.username)
+            val followerResult = followService.findFollow(token, deferredUser.await().id())
 
-            CommentResult.of(comment, profileResult)
+            CommentResult.of(comment, followerResult)
         }
 
         return commentResult
     }
 
-    suspend fun findBySlug(token: String?, slug: String): List<CommentResult> {
-        val article = articleFinder.findBySlug(slug)
-        val comments = commentRepository.findByArticleId(article.id!!)
+    suspend fun getBySlug(token: String?, slug: String): List<CommentResult> {
+        val article = articleFinder.findOne(slug)
+        val comments = commentRepository.findByArticleId(article.id())
 
         return comments.map { comment ->
             val user = userFinder.findById(article.userId)
-            val userResult = token?.let { followService.findFollow(token, user.username) }
+            val userResult = token?.let { followService.findFollow(token, user.id()) }
 
             CommentResult.of(comment, userResult)
         }.buffer().toList()
     }
 
     suspend fun delete(slug: String, commentId: Long) {
-        val article = articleFinder.findBySlug(slug)
-        val comment = commentRepository.findByIdAndArticleId(commentId, article.id!!)
+        val article = articleFinder.findOne(slug)
+        val comment = commentRepository.findByIdAndArticleId(commentId, article.id())
         comment.awaitSingleOrNull()?.delete() ?: throw CommentNotFoundException()
 
         commentRepository.save(comment.awaitSingle())

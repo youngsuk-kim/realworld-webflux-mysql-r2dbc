@@ -1,6 +1,5 @@
 package kr.bread.realworld.domain.user
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kr.bread.realworld.infra.UserRepository
 import kr.bread.realworld.support.JWTProperties
@@ -13,41 +12,22 @@ class UserFinder(
     private val userRepository: UserRepository,
     private val jwtProperties: JWTProperties
 ) {
-
-    private val log = KotlinLogging.logger {}
-
-    suspend fun findById(userId: Long?): UserResult {
+    suspend fun findById(userId: Long?): User {
         requireNotNull(userId)
 
-        val user = userRepository.findById(userId)
+        return userRepository.findById(userId)
             ?: throw UserNotFoundException()
-
-        return UserResult.of(user)
     }
 
-    suspend fun findByToken(token: String): UserResult {
+    suspend fun findByToken(token: String): User {
         val email = JWTUtils.findEmail(token, jwtProperties)
 
-        val user = (
-            userRepository.findByEmail(email).awaitSingleOrNull()
-                ?: throw UserNotFoundException()
-            )
-
-        return UserResult.of(user)
-    }
-
-    suspend fun findByUsername(username: String): UserResult {
-        val user = userRepository.findByUsername(username)?.awaitSingleOrNull()
-
-        return UserResult.of(user)
-    }
-
-    suspend fun findUserById(userId: Long): User? {
-        return userRepository.findById(userId)
-    }
-
-    suspend fun findByEmail(email: String): User {
         return userRepository.findByEmail(email).awaitSingleOrNull()
             ?: throw UserNotFoundException()
     }
+
+    suspend fun findByUsername(username: String) = userRepository.findByUsername(username)?.awaitSingleOrNull() ?: throw UserNotFoundException()
+
+    suspend fun findByEmail(email: String) = userRepository.findByEmail(email).awaitSingleOrNull()
+        ?: throw UserNotFoundException()
 }

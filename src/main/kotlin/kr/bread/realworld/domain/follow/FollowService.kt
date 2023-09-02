@@ -2,20 +2,18 @@ package kr.bread.realworld.domain.follow
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kr.bread.realworld.domain.user.UserFinder
-import kr.bread.realworld.infra.FollowRepository
-import kr.bread.realworld.support.exception.NoFollowExistException
 import org.springframework.stereotype.Service
 
 @Service
 class FollowService(
     private val userFinder: UserFinder,
-    private val followRepository: FollowRepository
+    private val followFinder: FollowFinder,
+    private val followAppender: FollowAppender
 ) {
 
     suspend fun follow(token: String, followeeUsername: String): FollowerResult {
-        val user = coroutineScope {
+        val follower = coroutineScope {
             val deferredFollower = async {
                 userFinder.findByToken(token)
             }
@@ -24,26 +22,21 @@ class FollowService(
                 userFinder.findByUsername(followeeUsername)
             }
 
-            followRepository.save(
+            followAppender.save(
                 Follow(
-                    followerId = deferredFollower.await().id,
-                    followeeId = deferredFollowee.await().id
+                    followerId = deferredFollower.await().id(),
+                    followeeId = deferredFollowee.await().id()
                 )
             )
 
             deferredFollower
         }.await()
 
-        return FollowerResult(
-            username = user.username,
-            bio = user.bio,
-            image = user.image,
-            following = true
-        )
+        return FollowerResult.of(follower, true)
     }
 
     suspend fun unfollow(token: String, followeeUsername: String): FollowerResult {
-        val user = coroutineScope {
+        val follower = coroutineScope {
             val deferredFollower = async {
                 userFinder.findByToken(token)
             }
@@ -52,45 +45,21 @@ class FollowService(
                 userFinder.findByUsername(followeeUsername)
             }
 
-            followRepository.findByFollowerIdAndFolloweeId(
-                deferredFollower.await().id,
-                deferredFollowee.await().id
-            ).awaitSingleOrNull()?.unfollow() ?: throw NoFollowExistException()
+            followFinder.findFollow(
+                deferredFollower.await().id(),
+                deferredFollowee.await().id()
+            ).unfollow()
 
-            deferredFollower
+            return@coroutineScope deferredFollower
         }.await()
 
-        return FollowerResult(
-            username = user.username,
-            bio = user.bio,
-            image = user.image,
-            following = false
-        )
+        return FollowerResult.of(follower, false)
     }
 
-    suspend fun findFollow(token: String, followeeUsername: String): FollowerResult {
-        val user = coroutineScope {
-            val deferredFollower = async {
-                userFinder.findByToken(token)
-            }
+    suspend fun findFollow(token: String, followeeId: Long): FollowerResult {
+        val follower = userFinder.findByToken(token)
+        val isFollower = followFinder.isFollower(follower.id(), followeeId)
 
-            val deferredFollowee = async {
-                userFinder.findByUsername(followeeUsername)
-            }
-
-            followRepository.findByFollowerIdAndFolloweeId(
-                deferredFollower.await().id,
-                deferredFollowee.await().id
-            ).awaitSingleOrNull() ?: throw NoFollowExistException()
-
-            deferredFollower
-        }.await()
-
-        return FollowerResult(
-            username = user.username,
-            bio = user.bio,
-            image = user.image,
-            following = false
-        )
+        return FollowerResult.of(follower, isFollower)
     }
 }
