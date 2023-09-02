@@ -1,7 +1,7 @@
 package kr.bread.realworld.provider.api
 
-import kr.bread.realworld.domain.article.ArticleService
 import kr.bread.realworld.domain.article.ArticleResult
+import kr.bread.realworld.domain.article.ArticleService
 import kr.bread.realworld.provider.ApiEndpoints.CREATE_ARTICLE_ENDPOINT
 import kr.bread.realworld.provider.ApiEndpoints.DELETE_ARTICLE_ENDPOINT
 import kr.bread.realworld.provider.ApiEndpoints.GET_ARTICLE_FEED_ENDPOINT
@@ -73,6 +73,7 @@ class ArticleApi(
             feed.count()
         )
     }
+
     @PutMapping(UPDATE_ARTICLE_ENDPOINT)
     suspend fun update(
         @Login token: String,
@@ -90,5 +91,4 @@ class ArticleApi(
     ): SingleArticleNestedHttpWrapper<ArticleResult> {
         return SingleArticleNestedHttpWrapper(articleService.delete(slug))
     }
-
 }

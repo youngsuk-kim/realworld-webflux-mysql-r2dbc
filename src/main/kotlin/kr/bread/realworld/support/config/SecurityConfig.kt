@@ -1,4 +1,4 @@
-package kr.bread.realworld.config
+package kr.bread.realworld.support.config
 
 import kr.bread.realworld.support.annotation.Login
 import org.springframework.context.annotation.Configuration
@@ -13,7 +13,6 @@ import org.springframework.web.reactive.result.method.annotation.ArgumentResolve
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
-
 
 private val allowHttpMethods = arrayOf("GET", "POST", "PUT", "DELETE")
 private const val addMappingPattern = "/**"

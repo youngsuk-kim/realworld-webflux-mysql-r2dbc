@@ -2,7 +2,6 @@ package kr.bread.realworld.domain.tag
 
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.toSet
 import kr.bread.realworld.infra.TagRepository
 import org.springframework.stereotype.Component

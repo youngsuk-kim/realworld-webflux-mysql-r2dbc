@@ -1,4 +1,4 @@
-package kr.bread.realworld.config
+package kr.bread.realworld.support.config
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.r2dbc.spi.ConnectionFactory

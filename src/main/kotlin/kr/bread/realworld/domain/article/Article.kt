@@ -55,7 +55,7 @@ class Article(
 
     @Transient
     @Value("null")
-    var tags: Set<Tag>? = null,
+    var tags: Set<Tag>? = null
 ) {
 
     companion object {

@@ -1,11 +1,7 @@
 package kr.bread.realworld.domain.user
 
-import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kr.bread.realworld.infra.UserRepository
 import kr.bread.realworld.support.exception.EmailAlreadyRegisterException
-import kr.bread.realworld.support.exception.UserNotFoundException
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserUpdateService(

@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import kr.bread.realworld.support.JWTProperties
-import java.util.Date
 import kr.bread.realworld.support.exception.InvalidJwtTokenException
+import java.util.Date
 
 object JWTUtils {
 
@@ -43,5 +43,5 @@ data class JWTClaim(
     val email: String,
     val username: String,
     val image: String = "",
-    val bio: String = "",
+    val bio: String = ""
 )

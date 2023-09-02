@@ -2,8 +2,6 @@ package kr.bread.realworld.provider.api
 
 import kr.bread.realworld.domain.follow.FollowService
 import kr.bread.realworld.domain.user.UserFinder
-import kr.bread.realworld.domain.user.AuthService
-import kr.bread.realworld.domain.user.UserRegisterService
 import kr.bread.realworld.domain.user.UserUpdateService
 import kr.bread.realworld.provider.ApiEndpoints.CURRENT_USER_ENDPOINT
 import kr.bread.realworld.provider.ApiEndpoints.FOLLOW_USER_ENDPOINT

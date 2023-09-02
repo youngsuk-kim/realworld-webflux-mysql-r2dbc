@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS USERS;
-CREATE TABLE USERS
+DROP TABLE IF EXISTS users;
+CREATE TABLE users
 (
     id         bigint NOT NULL AUTO_INCREMENT,
     email      varchar(100),
@@ -12,8 +12,8 @@ CREATE TABLE USERS
     primary key (id)
 );
 
-DROP TABLE IF EXISTS FOLLOW;
-CREATE TABLE FOLLOW
+DROP TABLE IF EXISTS follow;
+CREATE TABLE follow
 (
     id          bigint NOT NULL AUTO_INCREMENT,
     follower_Id bigint,
@@ -23,8 +23,8 @@ CREATE TABLE FOLLOW
     primary key (id)
 );
 
-DROP TABLE IF EXISTS ARTICLE;
-CREATE TABLE ARTICLE
+DROP TABLE IF EXISTS article;
+CREATE TABLE article
 (
     id          bigint NOT NULL AUTO_INCREMENT,
     user_id     bigint NOT NULL,
@@ -38,8 +38,8 @@ CREATE TABLE ARTICLE
     primary key (id)
 );
 
-DROP TABLE IF EXISTS COMMENTS;
-CREATE TABLE COMMENTS
+DROP TABLE IF EXISTS comments;
+CREATE TABLE comments
 (
     id         bigint NOT NULL AUTO_INCREMENT,
     body    mediumtext,
@@ -51,8 +51,8 @@ CREATE TABLE COMMENTS
     primary key (id)
 );
 
-DROP TABLE IF EXISTS TAG;
-CREATE TABLE TAG
+DROP TABLE IF EXISTS tag;
+CREATE TABLE tag
 (
     id         bigint NOT NULL AUTO_INCREMENT,
     name       VARCHAR(255),
@@ -62,8 +62,8 @@ CREATE TABLE TAG
     primary key (id)
 );
 
-DROP TABLE IF EXISTS FAVORITE;
-CREATE TABLE FAVORITE
+DROP TABLE IF EXISTS favoite;
+CREATE TABLE favoite
 (
     id         bigint NOT NULL AUTO_INCREMENT,
     user_id    bigint NOT NULL,

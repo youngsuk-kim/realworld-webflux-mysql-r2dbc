@@ -8,5 +8,4 @@ class UserAppender(
     private val userRepository: UserRepository
 ) {
     suspend fun save(user: User) = userRepository.save(user)
-
 }

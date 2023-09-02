@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
-@Table("TAG")
+@Table("tag")
 class Tag(
 
     @Id
@@ -21,5 +21,5 @@ class Tag(
 
     @CreatedDate
     @Column("created_at")
-    var createdAt: LocalDateTime = LocalDateTime.now(),
+    var createdAt: LocalDateTime = LocalDateTime.now()
 )

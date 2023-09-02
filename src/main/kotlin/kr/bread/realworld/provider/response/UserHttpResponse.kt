@@ -14,4 +14,3 @@ data class UserUpdateHttpResponse(
     val bio: String? = null,
     val image: String? = null
 )
-

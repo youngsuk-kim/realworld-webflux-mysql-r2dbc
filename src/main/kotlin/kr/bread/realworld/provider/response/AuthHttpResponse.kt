@@ -15,4 +15,3 @@ data class UserRegisterHttpResponse(
     val bio: String? = null,
     val image: String? = null
 )
-

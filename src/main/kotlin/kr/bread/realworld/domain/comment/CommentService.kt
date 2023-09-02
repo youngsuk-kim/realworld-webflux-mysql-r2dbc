@@ -9,13 +9,14 @@ import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kr.bread.realworld.domain.article.ArticleFinder
 import kr.bread.realworld.domain.follow.FollowService
+import kr.bread.realworld.domain.user.UserFinder
 import kr.bread.realworld.infra.CommentRepository
 import kr.bread.realworld.support.exception.CommentNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
 class CommentService(
-    private val userFindServiceIn: UserFindServiceIn,
+    private val userFinder: UserFinder,
     private val articleFinder: ArticleFinder,
     private val commentRepository: CommentRepository,
     private val followService: FollowService
@@ -24,7 +25,7 @@ class CommentService(
     suspend fun save(token: String, body: String, slug: String): CommentResult {
         val commentResult = coroutineScope {
             val deferredUser = async {
-                userFindServiceIn.findByToken(token)
+                userFinder.findByToken(token)
             }.await()
 
             val deferredArticle = async {
@@ -48,7 +49,7 @@ class CommentService(
         val comments = commentRepository.findByArticleId(article.id!!)
 
         return comments.map { comment ->
-            val user = userFindServiceIn.findById(article.userId)
+            val user = userFinder.findById(article.userId)
             val userResult = token?.let { followService.findFollow(token, user.username) }
 
             CommentResult.of(comment, userResult)

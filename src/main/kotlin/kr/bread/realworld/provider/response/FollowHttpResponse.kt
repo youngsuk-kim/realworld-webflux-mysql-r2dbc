@@ -13,4 +13,3 @@ data class UserUnFollowHttpResponse(
     val image: String?,
     val following: Boolean
 )
-
