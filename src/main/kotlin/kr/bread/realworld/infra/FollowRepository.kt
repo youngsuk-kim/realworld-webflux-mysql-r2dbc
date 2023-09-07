@@ -8,5 +8,5 @@ import reactor.core.publisher.Mono
 interface FollowRepository : CoroutineCrudRepository<Follow, Long> {
     fun findByFollowerIdAndFolloweeId(followerId: Long, followeeId: Long): Mono<Follow>
     fun findByFolloweeId(followeeId: Long): Flow<Follow>
-    fun existsByFolloweeIdAndFollowerId(followeeId: Long, followerId: Long): Boolean
+    fun existsByFolloweeIdAndFollowerId(followeeId: Long, followerId: Long): Mono<Boolean>
 }

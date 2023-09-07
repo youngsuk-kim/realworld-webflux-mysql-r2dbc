@@ -14,7 +14,7 @@ data class CommentResult(
     companion object {
         fun of(comment: Comment, followerResult: FollowerResult?): CommentResult {
             return CommentResult(
-                id = comment.id(),
+                id = comment.id!!,
                 body = comment.body,
                 createdAt = comment.createdAt,
                 updatedAt = comment.updatedAt,

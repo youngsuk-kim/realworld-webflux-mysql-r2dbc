@@ -21,7 +21,8 @@ data class UserResult(
                 email = user.email,
                 token = token,
                 username = user.username,
-                bio = user.bio
+                bio = user.bio,
+                image = user.image
             )
         }
 

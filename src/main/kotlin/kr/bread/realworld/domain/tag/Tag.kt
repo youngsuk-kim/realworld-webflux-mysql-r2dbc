@@ -11,7 +11,7 @@ class Tag(
 
     @Id
     @Column("id")
-    val id: Long? = null,
+    var id: Long? = null,
 
     @Column("name")
     var name: String,
@@ -22,9 +22,4 @@ class Tag(
     @CreatedDate
     @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now()
-) {
-    fun id(): Long {
-        requireNotNull(this.id) { "id cannot be null" }
-        return this.id
-    }
-}
+)

@@ -2,6 +2,7 @@ package kr.bread.realworld.domain.favorite
 
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.toSet
+import kotlinx.coroutines.reactive.awaitFirst
 import kr.bread.realworld.infra.FavoriteRepository
 import org.springframework.stereotype.Component
 
@@ -14,7 +15,7 @@ class FavoriteFinder(
         favoriteRepository.findByArticleId(id).buffer().toSet()
 
     suspend fun isFavoriteArticle(articleId: Long, userId: Long) =
-        favoriteRepository.existsByUserIdAndArticleId(articleId, userId)
+        favoriteRepository.existsByUserIdAndArticleId(articleId, userId).awaitFirst()
 
-    suspend fun countFavorite(articleId: Long) = favoriteRepository.countByArticleId(articleId)
+    suspend fun countFavorite(articleId: Long) = favoriteRepository.countByArticleId(articleId).awaitFirst()
 }

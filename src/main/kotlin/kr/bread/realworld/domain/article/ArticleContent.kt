@@ -12,7 +12,7 @@ data class ArticleContent(
     val updatedAt: LocalDateTime? = null
 ) {
     companion object {
-        fun of(article: Article): ArticleContent {
+        fun of(article: Article, tagNames: Set<String>): ArticleContent {
             return ArticleContent(
                 slug = article.slug,
                 title = article.title,
@@ -20,7 +20,7 @@ data class ArticleContent(
                 body = article.body,
                 createdAt = article.createdAt,
                 updatedAt = article.updatedAt,
-                tagNames = article.tags?.map { it.name }?.toSet()
+                tagNames = tagNames
             )
         }
     }
@@ -30,5 +30,6 @@ data class ArticleUpdateContent(
     val slug: String,
     val title: String?,
     val description: String?,
-    val body: String?
+    val body: String?,
+    val tagList: Set<String>?
 )

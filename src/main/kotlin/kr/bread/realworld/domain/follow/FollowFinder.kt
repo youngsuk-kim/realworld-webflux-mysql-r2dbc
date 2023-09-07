@@ -2,6 +2,7 @@ package kr.bread.realworld.domain.follow
 
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kr.bread.realworld.domain.user.UserFinder
 import kr.bread.realworld.infra.FollowRepository
@@ -17,7 +18,7 @@ class FollowFinder(
     suspend fun findFollowee(token: String): List<Follow> {
         val follower = userFinder.findByToken(token)
 
-        return followRepository.findByFolloweeId(follower.id())
+        return followRepository.findByFolloweeId(follower.id!!)
             .buffer().toList()
     }
 
@@ -26,5 +27,5 @@ class FollowFinder(
             .awaitSingleOrNull() ?: throw FollowNotFoundException()
     }
 
-    suspend fun isFollower(followeeId: Long, followerId: Long) = followRepository.existsByFolloweeIdAndFollowerId(followeeId, followerId)
+    suspend fun isFollower(followeeId: Long, followerId: Long) = followRepository.existsByFolloweeIdAndFollowerId(followeeId, followerId).awaitSingle()
 }

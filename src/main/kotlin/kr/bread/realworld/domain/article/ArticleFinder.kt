@@ -1,6 +1,7 @@
 package kr.bread.realworld.domain.article
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -45,18 +46,18 @@ class ArticleFinder(
             with(article) {
                 article.of(
                     user = userFinder.findById(userId),
-                    favorites = favoriteFinder.findByArticleId(id()),
-                    tags = tagFinder.findAll(id())
+                    favorites = favoriteFinder.findByArticleId(id!!),
+                    tags = tagFinder.findAll(id!!)
                 )
             }
         }
 
-    suspend fun findUsingPagingFilterByAuthor(
-        userId: Long,
+    suspend fun findUsingPagingFilterByFollowee(
+        followeeId: Long,
         articlePaging: ArticlePaging
     ): Set<Article> {
         return articleRepository.findAll()
-            .filter { it.checkSameAuthor(userId) }
+            .filter { it.checkSameAuthor(followeeId) }
             .drop(articlePaging.offset)
             .take(articlePaging.limit)
             .toSet()
@@ -103,15 +104,16 @@ class ArticleFinder(
 
     suspend fun findOne(token: String?, slug: String): ArticleResult {
         val article = findOne(slug)
-        val favoriteCount = favoriteFinder.countFavorite(article.id())
+        val favoriteCount = favoriteFinder.countFavorite(article.id!!)
         val author = userFinder.findById(article.userId)
+        val tagNames = tagFinder.findAll(article.id!!).map { it.name }.toSet()
 
         if (!token.isNullOrBlank()) {
-            return loginUserArticleResult(token, article, favoriteCount, author)
+            return loginUserArticleResult(token, article, favoriteCount, author, tagNames)
         }
 
         return ArticleResult.of(
-            articleContent = ArticleContent.of(article),
+            articleContent = ArticleContent.of(article, tagNames),
             favoritesCount = favoriteCount,
             followAuthor = false,
             author = UserResult.of(author),
@@ -123,20 +125,25 @@ class ArticleFinder(
         token: String?,
         article: Article,
         favoriteCount: Int,
-        author: User
+        author: User,
+        tagNames: Set<String>
     ): ArticleResult {
         requireNotNull(token) { "token cannot be null" }
 
         val user = userFinder.findByToken(token)
-        val isFollower = followFinder.isFollower(user.id(), article.id())
-        val isFavoriteArticle = favoriteFinder.isFavoriteArticle(article.id(), user.id())
+        val isFollower = followFinder.isFollower(user.id!!, article.id!!)
+        val isFavoriteArticle = favoriteFinder.isFavoriteArticle(article.id!!, user.id!!)
 
         return ArticleResult.of(
-            articleContent = ArticleContent.of(article),
+            articleContent = ArticleContent.of(article, tagNames),
             favoritesCount = favoriteCount,
             followAuthor = isFollower,
             author = UserResult.of(author),
-            favorited = isFavoriteArticle
+            favorited = isFavoriteArticle,
         )
+    }
+
+    suspend fun findByUserId(id: Long): Set<Article> {
+        return articleRepository.findByUserId(id).buffer().toSet()
     }
 }

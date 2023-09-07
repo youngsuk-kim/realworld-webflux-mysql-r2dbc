@@ -43,7 +43,7 @@ class ArticleApi(
         SingleArticleNestedHttpWrapper(articleService.getOne(slug = slug).toArticleHttpResponse())
 
     @GetMapping(GET_LIST_ARTICLE_ENDPOINT)
-    suspend fun readAll(
+    suspend fun getAll(
         @Login token: String,
         @RequestParam(required = false) tag: String?,
         @RequestParam(required = false) author: String?,
@@ -78,8 +78,8 @@ class ArticleApi(
         @PathVariable slug: String,
         @RequestBody request: SingleArticleNestedHttpWrapper<ArticleUpdateHttpRequest>
     ): SingleArticleNestedHttpWrapper<ArticleHttpResponse> {
-        val (title, description, body) = request.article
-        return SingleArticleNestedHttpWrapper(articleService.update(token, ArticleUpdateContent(slug, title, description, body)).toArticleHttpResponse())
+        val (title, description, body, tagList) = request.article
+        return SingleArticleNestedHttpWrapper(articleService.update(token, ArticleUpdateContent(slug, title, description, body, tagList)).toArticleHttpResponse())
     }
 
     @DeleteMapping(DELETE_ARTICLE_ENDPOINT)

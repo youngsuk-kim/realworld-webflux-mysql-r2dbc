@@ -17,7 +17,7 @@ class Article(
 
     @Id
     @Column("id")
-    val id: Long? = null,
+    var id: Long? = null,
 
     @Column("slug")
     var slug: String,
@@ -33,9 +33,6 @@ class Article(
 
     @Column("body")
     var body: String,
-
-    @Column("is_deleted")
-    var isDeleted: Boolean = false,
 
     @CreatedDate
     @Column("created_at")
@@ -95,11 +92,6 @@ class Article(
         }
     }
 
-    fun id(): Long {
-        requireNotNull(this.id) { "id cannot be null" }
-        return this.id
-    }
-
     fun checkSameAuthor(userId: Long): Boolean {
         return this.userId == userId
     }
@@ -110,10 +102,10 @@ class Article(
     }
 
     fun update(articleUpdateContent: ArticleUpdateContent): Article {
-        val (slug, title, description, body) = articleUpdateContent
+        val (_, title, description, body, _) = articleUpdateContent
         if (!title.isNullOrBlank()) {
             this.title = title
-            this.slug = slug
+            this.slug = makeSlug(title)
         }
 
         if (!description.isNullOrBlank()) {
@@ -127,11 +119,4 @@ class Article(
         return this
     }
 
-    fun delete(): Article {
-        this.isDeleted = true
-
-        return this
-    }
-
-    fun favoriteCount() = this.favorites.count()
 }

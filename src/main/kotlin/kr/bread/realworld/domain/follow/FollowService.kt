@@ -13,7 +13,7 @@ class FollowService(
 ) {
 
     suspend fun follow(token: String, followeeUsername: String): FollowerResult {
-        val follower = coroutineScope {
+        val followee = coroutineScope {
             val deferredFollower = async {
                 userFinder.findByToken(token)
             }
@@ -24,19 +24,19 @@ class FollowService(
 
             followAppender.save(
                 Follow(
-                    followerId = deferredFollower.await().id(),
-                    followeeId = deferredFollowee.await().id()
+                    followerId = deferredFollower.await().id!!,
+                    followeeId = deferredFollowee.await().id!!
                 )
             )
 
-            deferredFollower
+            deferredFollowee
         }.await()
 
-        return FollowerResult.of(follower, true)
+        return FollowerResult.of(followee, true)
     }
 
     suspend fun unfollow(token: String, followeeUsername: String): FollowerResult {
-        val follower = coroutineScope {
+        val followee = coroutineScope {
             val deferredFollower = async {
                 userFinder.findByToken(token)
             }
@@ -46,19 +46,19 @@ class FollowService(
             }
 
             followFinder.findFollow(
-                deferredFollower.await().id(),
-                deferredFollowee.await().id()
+                deferredFollower.await().id!!,
+                deferredFollowee.await().id!!
             ).unfollow()
 
-            return@coroutineScope deferredFollower
+            return@coroutineScope deferredFollowee
         }.await()
 
-        return FollowerResult.of(follower, false)
+        return FollowerResult.of(followee, false)
     }
 
     suspend fun findFollow(token: String, followeeId: Long): FollowerResult {
         val follower = userFinder.findByToken(token)
-        val isFollower = followFinder.isFollower(follower.id(), followeeId)
+        val isFollower = followFinder.isFollower(follower.id!!, followeeId)
 
         return FollowerResult.of(follower, isFollower)
     }

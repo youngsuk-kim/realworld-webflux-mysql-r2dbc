@@ -42,7 +42,7 @@ private const val SPACE = " "
 private const val TOKEN_POSITION = 1
 
 @Component
-class AuthTokenResolver : HandlerMethodArgumentResolver {
+class AuthTokenResolver: HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter) = parameter.hasParameterAnnotation(Login::class.java)
 
     override fun resolveArgument(
@@ -51,9 +51,10 @@ class AuthTokenResolver : HandlerMethodArgumentResolver {
         exchange: ServerWebExchange
     ): Mono<Any> {
         val authHeader = exchange.request.headers[HttpHeaders.AUTHORIZATION]?.first()
-        checkNotNull(authHeader)
+        requireNotNull(authHeader) { "token can not be null." }
 
         val token = authHeader.split(SPACE)[TOKEN_POSITION]
+
         return token.toMono()
     }
 }

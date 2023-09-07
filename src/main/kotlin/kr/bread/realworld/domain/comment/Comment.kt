@@ -12,7 +12,7 @@ class Comment(
 
     @Id
     @Column("id")
-    val id: Long? = null,
+    var id: Long? = null,
 
     @Column("body")
     var body: String,
@@ -23,9 +23,6 @@ class Comment(
     @Column("user_id")
     var userId: Long,
 
-    @Column("is_deleted")
-    var isDeleted: Boolean = false,
-
     @CreatedDate
     @Column("created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
@@ -33,13 +30,4 @@ class Comment(
     @LastModifiedDate
     @Column("updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
-) {
-    fun id(): Long {
-        requireNotNull(this.id) { "id cannot be null" }
-
-        return this.id
-    }
-    fun delete() {
-        this.isDeleted = true
-    }
-}
+)

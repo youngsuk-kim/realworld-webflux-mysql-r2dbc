@@ -32,7 +32,6 @@ CREATE TABLE article
     title       varchar(255),
     description varchar(500),
     body        mediumtext,
-    is_deleted  boolean,
     created_at  timestamp default NOW(),
     updated_at  timestamp default NOW(),
     primary key (id)
@@ -45,7 +44,6 @@ CREATE TABLE comments
     body    mediumtext,
     article_id bigint NOT NULL,
     user_id bigint NOT NULL,
-    is_deleted boolean,
     created_at timestamp default NOW(),
     updated_at timestamp default NOW(),
     primary key (id)
@@ -58,7 +56,6 @@ CREATE TABLE tag
     name       VARCHAR(255),
     article_id bigint NOT NULL,
     created_at timestamp default NOW(),
-    is_deleted boolean,
     primary key (id)
 );
 
@@ -68,7 +65,6 @@ CREATE TABLE favorite
     id         bigint NOT NULL AUTO_INCREMENT,
     user_id    bigint NOT NULL,
     article_id bigint NOT NULL,
-    is_deleted boolean,
     created_at timestamp default NOW(),
     primary key (id)
 );

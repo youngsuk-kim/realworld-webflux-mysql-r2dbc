@@ -3,6 +3,7 @@ package kr.bread.realworld.support.utils
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
+import java.time.Instant
 import kr.bread.realworld.support.JWTProperties
 import kr.bread.realworld.support.exception.InvalidJwtTokenException
 import java.util.Date
@@ -18,7 +19,7 @@ object JWTUtils {
             .withIssuer(properties.issuer)
             .withSubject(properties.subject)
             .withIssuedAt(Date())
-            .withExpiresAt(Date(Date().time + EXPIRE_TIME))
+            .withExpiresAt(Date.from(Instant.now().plusSeconds(EXPIRE_TIME.toLong())))
             .withClaim(EMAIL, claim.email)
             .sign(Algorithm.HMAC256(properties.secret))
 

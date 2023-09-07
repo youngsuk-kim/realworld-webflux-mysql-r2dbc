@@ -6,14 +6,14 @@ data class ArticleCreateHttpRequest(
     val title: String,
     val description: String,
     val body: String,
-    val tagNames: Set<String>
+    val tagList: Set<String>?
 ) {
     fun toArticleContent(): ArticleContent {
         return ArticleContent(
             title = title,
             description = description,
             body = body,
-            tagNames = tagNames
+            tagNames = tagList
         )
     }
 }
@@ -21,5 +21,6 @@ data class ArticleCreateHttpRequest(
 data class ArticleUpdateHttpRequest(
     val title: String?,
     val description: String?,
-    val body: String?
+    val body: String?,
+    val tagList: Set<String>?
 )

@@ -19,5 +19,5 @@ class UserService(
         return UserResult.of(user, token)
     }
 
-    suspend fun getOne(token: String) = UserResult.of(userFinder.findByToken(token))
+    suspend fun getOne(token: String) = UserResult.of(userFinder.findByToken(token), token)
 }

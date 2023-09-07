@@ -12,7 +12,8 @@ class FavoriteService(
     private val userFinder: UserFinder,
     private val articleFinder: ArticleFinder,
     private val favoriteFinder: FavoriteFinder,
-    private val favoriteAppender: FavoriteAppender
+    private val favoriteAppender: FavoriteAppender,
+    private val favoriteRemover: FavoriteRemover
 ) {
 
     suspend fun favorite(token: String, slug: String): ArticleResult {
@@ -25,7 +26,7 @@ class FavoriteService(
                 articleFinder.findOne(slug)
             }
 
-            Favorite(userId = userResultDeferred.await().id(), articleId = articleDeferred.await().id())
+            Favorite(userId = userResultDeferred.await().id!!, articleId = articleDeferred.await().id!!)
         }
 
         favoriteAppender.save(favorite)
@@ -36,9 +37,7 @@ class FavoriteService(
     suspend fun unFavorite(token: String, slug: String): ArticleResult {
         val article = articleFinder.findOne(slug)
         val favorite = favoriteFinder.findByArticleId(article.id!!).first()
-        favorite.delete()
-
-        favoriteAppender.save(favorite)
+        favoriteRemover.remove(favorite)
 
         return articleFinder.findOne(token, slug)
     }

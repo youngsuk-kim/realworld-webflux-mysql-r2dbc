@@ -28,9 +28,15 @@ data class ArticleResult(
 
     fun toArticleHttpResponse(): ArticleHttpResponse {
         return ArticleHttpResponse(
+            slug = articleContent.slug,
+            title = articleContent.title,
+            description = articleContent.description,
+            body = articleContent.body,
+            createdAt = articleContent.createdAt,
+            updatedAt = articleContent.updatedAt,
+            tagList = articleContent.tagNames,
             favorited = this.favorited,
             favoritesCount = this.favoritesCount,
-            articleContent = this.articleContent,
             author = this.author
         )
     }

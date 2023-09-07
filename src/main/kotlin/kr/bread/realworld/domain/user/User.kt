@@ -15,7 +15,7 @@ class User(
 
     @Id
     @Column("id")
-    val id: Long? = null,
+    var id: Long? = null,
 
     @Column("username")
     var username: String,
@@ -51,11 +51,6 @@ class User(
          */
         fun of(username: String, email: String, password: String) =
             User(username = username, email = email, password = password)
-    }
-
-    fun id(): Long {
-        requireNotNull(this.id) { "id cannot be null" }
-        return this.id
     }
 
     fun update(email: String?, bio: String?, image: String?): User {
